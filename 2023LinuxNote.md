@@ -33,5 +33,5 @@
 
 
 ----------
-[linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/51b05b58162480da8937799b2c8a96a70cf68f0f/source/linux0912-1.png
+[linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/51b05b58162480da8937799b2c8a96a70cf68f0f/source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員
