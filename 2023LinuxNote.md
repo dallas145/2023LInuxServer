@@ -43,6 +43,49 @@
 
 ![linux0912-5][linux0912-5]
 
+### (2023/09/19)
+#### 複習：ssh伺服器無法連接除錯
+
+1. 確認伺服器已開啟
+    * `systemctl status sshd`
+    * 若未開啟，使用`systemctl start sshd`
+2. 確認port number
+    * `netstat -tulnp | grep sshd`
+    * 若要修改，修改`/etc/ssh/sshd_config`
+3. 確認selinux已關閉
+    * `getenforce`
+    * 若要更改，修改`/etc/selinux`
+4. 確認防火牆已關閉
+    * `systemctl status firewalld`
+    * 若未關閉，使用`systemctl stop firewalld`，並用`systemctl disable firewalld`使其不會自動開啟
+
+**修改完記得重開機**
+
+#### 複習：使用winscp及PuTTY在windows連上虛擬機
+* 作業一：
+
+#### 操作無密碼登入
+1. 若`/.ssh`已存在：`rm -rf /.ssh`
+2. `ssh-keygen`
+3. `ssh-copy-id [user]@[host]` ex: `ssh-copy-id root@centos7-2`
+
+* 作業二：
+
+#### scp指令操作
+* `scp` `欲複製檔案` `貼上路徑`
+* ex: `scp /etc/hosts root@centos7-2:/etc/hosts`
+* ex: `scp -r root@centos7-2:/root/testdir/ /root/`
+
+#### ssh執行單一指令
+* `ssh [user]@[host] [command]`
+* ex: `ssh root@centos7-2 ls /root`
+
+#### 更改sshd port number
+* 修改`/etc/ssh/sshd_config`
+* 作業三：
+
+#### 課本第十章
+
 ----------
 [linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/51b05b58162480da8937799b2c8a96a70cf68f0f/source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員
