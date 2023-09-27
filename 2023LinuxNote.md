@@ -108,12 +108,41 @@
 ### (2023/09/26)
 
 #### 在內網建立網頁
-在windows(主機)建立一個含圖片及文字的html檔(用word)  
+1. 在windows(主機)建立一個含圖片及文字的html檔(用word)  
+2. 將檔案透過winscp上傳到虛擬機  
+3. 將html檔移動至`/var/www/html`目錄中  
+4. 在虛擬機的瀏覽器網址列中輸入虛擬機`ip位址 + /檔名.html`即可查看頁面  
 
+![linux0926-1][linux0926-1]
 
 #### 用ngrok建立可在外網使用的網頁
+1. 登入`ngrok`
+2. 下載`ngrok`主程式
+3. 依照官網指示操作設定`ngrok`
+4. 輸入指令
+```
+# ./ngrok http 80
+```
+
+即可使用命令列中顯示的網址查看頁面  
+
+![linux0926-2][linux0926-2]
 
 #### 課本
+##### 從原始碼編譯htop
+
+1. 從[這裡][htop_source]下載htop原始碼
+2. 將下載到的原始碼壓縮檔解壓縮
+3. 執行`configure`執行檔
+```
+# ./configure
+```
+4. 執行`make`
+5. 執行`make install`
+6. 執行`htop`即可開啟程式，按下`q`鍵可以退出
+
+![linux0926-3][linux0926-3]
+
 
 ----------
 [linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-1.png?raw=tru
@@ -128,3 +157,7 @@
 [linux0919-3]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0919-3.png?raw=tru
 [linux0919-4]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0919-4.png?raw=tru
 [linux0919-5]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0919-5.png?raw=tru
+[linux0926-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0926-1.png?raw=tru
+[linux0926-2]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0926-2.png?raw=tru
+[linux0926-3]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0926-3.png?raw=tru
+[htop_source]: https://src.fedoraproject.org/lookaside/extras/htop/htop-2.2.0.tar.gz/sha512/ec1335bf0e3e0387e5e50acbc508d0effad19c4bc1ac312419dc97b82901f4819600d6f87a91668f39d429536d17304d4b14634426a06bec2ecd09df24adc62e/
