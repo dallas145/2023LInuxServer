@@ -105,7 +105,15 @@
 | -ql  | 查詢套件所安裝的檔案清單 |
 | -qf  | 查詢系統特定檔案的來源安裝套件 |
 
+### (2023/09/26)
 
+#### 在內網建立網頁
+在windows(主機)建立一個含圖片及文字的html檔(用word)  
+
+
+#### 用ngrok建立可在外網使用的網頁
+
+#### 課本
 
 ----------
 [linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-1.png?raw=tru
