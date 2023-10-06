@@ -143,6 +143,74 @@
 
 ![linux0926-3][linux0926-3]
 
+### (2023/10/03)
+#### 建立nfs伺服器
+
+1. Server端設置
+    * 安裝NFS
+
+    ```
+    # yum install nfs-utils
+    ```
+
+    **安裝`nfs-utils`會自動安裝`rpcbind`**
+
+    * 設置NFS開機自動啟動
+
+    ```
+    # systemctl enable rpcbind
+    # systemctl enable nfs
+    ```
+
+    * 啟動NFS
+
+    ```
+    # systemctl start rpcbind
+    # systemctl start nfs
+    ```
+
+    **課堂上使用的虛擬機為求實驗方便已將防火牆關閉，故無須設置防火牆**
+
+    * 設置共享目錄
+
+    ```
+    # mkdir /data -p
+    ```
+
+    **`-p`參數表示若目錄存在不動作若不存在則建立目錄，即不產生錯誤訊息**
+
+    * 配置導出目錄
+
+    ```
+    # vim /etc/exports
+    ```
+
+    * 在`/etc/exports`檔案中新增以下內容
+
+    ```
+    /data   192.168.241.0/24(rw,sync,no_root_squash,no_all_squash)
+    ```
+
+    * 內容說明：
+
+        1. `/data`:共享目錄位置
+        2. `192.168.241.0/24`:客戶端IP範圍
+        3. `rw`:設置讀寫權限
+        4. `sync`:同步共享目錄
+        5. `no_root_squash`:可以使用root權限
+        6. `no_all_squash`:可以使用普通用戶權限
+
+    * `:wq`存檔後，重新啟動NFS
+
+    ```
+    # systemctl restart nfs
+    ```
+
+    * 檢查本機的共享目錄
+
+    ```
+    # showmount -e localhost
+    ```
 
 ----------
 [linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-1.png?raw=tru
