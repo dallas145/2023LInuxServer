@@ -141,6 +141,18 @@
 5. 執行`make install`
 6. 執行`htop`即可開啟程式，按下`q`鍵可以退出
 
+##### du - 目錄空間使用量
+
+**常用參數：**
+* `-s`:顯示該目錄的總用量，不顯示子目錄
+* `-h`:以磁碟單位顯示空間用量
+* `--max-depth=N`:限制只顯示至第N層子目錄
+
+##### df - 掛載的磁碟分割資訊
+
+**常用參數**
+* `-h`:以磁碟單位顯示空間用量
+
 ![linux0926-3][linux0926-3]
 
 ### (2023/10/03)
@@ -218,6 +230,191 @@
     Export list for localhost:
     /data 192.168.241.0/24
     ```
+
+#### 課本
+
+##### dd - 讀取檔案並輸出
+早期在UNIX環境下，用來拷貝磁片內容，現在常用來產生特定大小的測試檔案，如需要產生3MB大小的測試檔案，可使用以下指令：
+
+```
+# dd if=/dev/zero of=file3m bs=1M count=3
+```
+
+* `if`參數用來指定來源檔案，`/dev/zero`是一個會不斷產生0的檔案
+
+* `of`參數用來指定目的檔案名稱
+
+* `bs=1M`代表產生1M區塊大小
+
+* `count=3`代表產生3個區塊
+
+##### wc - 統計檔案行數與字數
+`wc`指令可用來統計檔案有多少行(newline/ line feed/ LF)、多少個英文字節(word)與多少個位元組(byte /letters)
+
+**常用參數**
+* `-l`:只顯示行數
+
+* `-c`:只顯示字元數
+
+* `-w`:只顯示英文字節
+
+###### 測試
+```
+# cat test.txt
+hello world
+tom marry john
+
+1234 nqu
+peter
+# cat -n test.txt
+    1  hello world
+    2  tom marry john
+    3  
+    4  1234 nqu
+    5  peter
+# wc test.txt
+ 5  8 42 test.txt
+```
+
+* `cat`指令加上`-n`參數會加上行號
+
+* `wc`指令輸出格式為
+    ```
+    行數  英文字節數  byte數(letters)  檔案名稱
+    ```
+
+##### tr - 取代或刪除字元
+tr指令可將標準輸入字串的特定字元取代或刪除，並輸入取代結果
+
+* [參考資料：tr 命令，Linux tr 命令详解：将字符进行替换压缩和删除 -  Linux 命令搜索引擎](https://wangchujiang.com/linux-command/c/tr.html)
+
+###### 測試1
+```
+# echo "ABCDEFG"
+ABCDEFG
+# echo "ABCDEFG" | tr "ABC" "xyz"
+xyzDEFG
+```
+
+###### 測試2
+```
+# echo "ABCDEFG" | tr [:upper:] [:lower:]
+abcdefg
+```
+
+tr定義的常用集合：
+* `[:alnum:]`:所有大小寫字母與數字的集合
+
+* `[:alpha:]`:所有大小寫字母的集合
+
+* `[:blank:]`:空白
+
+* `[:digit:]`:代表所有數字的集合
+
+* `[:upper:]`:代表所有大寫字母的集合
+
+* `[:lower:]`:代表所有小寫字母的集合
+
+###### 測試3
+```
+# echo ABC | tr -d 'A'
+BC
+```
+
+* `-d`參數可刪除特定字元
+
+###### 測試4
+
+```
+# cat test.txt
+hello world     
+tom    marry   john
+
+1234 nqu
+peter
+# cat -T -E test.txt
+hello world     $
+tom^Imarry^Ijohn$
+$
+1234 nqu$
+peter$
+# cat test.txt | tr "\t" " "
+hello world
+tom marry john
+
+1234 nqu
+peter
+```
+
+* `cat`指令的`-T`參數可將tab顯示為`^I`，`-E`參數可在每行的結尾加上`$`
+
+* `\t`代表字串中的`tab`
+
+###### 測試4
+```
+# echo aa.,a 1 b#$bb 2 c*/cc 3 ddd 4 | tr -d -c '0-9 \n'
+ 1  2  3  4
+```
+
+* `-c`參數表示除了`'0-9 \n'`（0到9、空格、換行）此字符集以外的字符
+
+##### seq - 產生序列數字
+用法如下
+```
+seq 起始值 [累加值] 結束值
+```
+
+ex:
+
+```
+# seq 1 10
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10 
+```
+
+```
+# seq 10 -1 0
+10 9
+8
+7
+6
+5
+4
+3
+2
+1
+0
+```
+
+* `-w`參數可補0讓每個數字一樣寬度
+
+```
+# seq -w 1 2 11
+01
+03
+05
+07
+09
+11
+```
+
+###### 測試
+```
+# seq -s "+" 1 10 | bc
+55
+```
+
+* `-s`參數可以指定分隔符號
+
+* `bc`可以計算字串中的運算式
 
 ----------
 [linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-1.png?raw=tru
