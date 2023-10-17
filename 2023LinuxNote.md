@@ -231,6 +231,45 @@
     /data 192.168.241.0/24
     ```
 
+2. Client端設置
+    
+    * 安裝NFS
+
+    ```
+    # yum install nfs-utils
+    ```
+
+    **安裝`nfs-utils`會自動安裝`rpcbind`**
+
+    * 設置NFS開機自動啟動
+
+    ```
+    # systemctl enable rpcbind
+    # systemctl enable nfs
+    ```
+
+    * 啟動NFS
+
+    ```
+    # systemctl start rpcbind
+    # systemctl start nfs
+    ```
+
+    * 新增掛載資料夾
+
+    ```
+    # mkdir /nfs-data
+    ```
+
+    * 掛載
+
+    ```
+    # mount -t nfs 192.168.241.100:/data /nfs-data
+    ```
+
+* 成果展示
+![linux1003-1][linux1003-1]
+
 #### 課本
 
 ##### dd - 讀取檔案並輸出
@@ -416,6 +455,16 @@ ex:
 
 * `bc`可以計算字串中的運算式
 
+### (2023/10/17)
+#### samba
+
+* 安裝
+```
+# yum install samba samba-client samba-common -y
+```
+
+
+
 ----------
 [linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
@@ -433,3 +482,4 @@ ex:
 [linux0926-2]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0926-2.png?raw=tru
 [linux0926-3]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0926-3.png?raw=tru
 [htop_source]: https://src.fedoraproject.org/lookaside/extras/htop/htop-2.2.0.tar.gz/sha512/ec1335bf0e3e0387e5e50acbc508d0effad19c4bc1ac312419dc97b82901f4819600d6f87a91668f39d429536d17304d4b14634426a06bec2ecd09df24adc62e/
+[linux1003-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1003-1.png?raw=tru
