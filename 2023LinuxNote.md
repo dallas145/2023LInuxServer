@@ -463,7 +463,60 @@ ex:
 # yum install samba samba-client samba-common -y
 ```
 
+設置SAMBA server:  
 
+1. 建立目標資料夾：
+```
+# cd /
+# mkdir test_samba
+```
+
+2. 更改資料夾狀態：
+```
+# chown nobody /test_samba
+# chmod 777 /test_samba
+```
+
+3. 編輯SAMBA設定檔：
+```
+# vim /etc/samba/smb.conf
+```
+
+* 設定內容：
+```
+[test]
+        comment = for test # 註解
+        path = /test_samba # 資料夾路徑（須在root下）
+        read only = no     # 設定為可寫入
+        guest ok = yes     # 可以給一般使用者使用
+        browseable = yes   # 可以瀏覽的
+```
+
+4. 測試設定的參數
+```
+testparm
+```
+
+5. 啟動SAMBA  
+
+**記得要關閉防火牆**
+```
+# systemctl start smb
+```
+
+6. 查看使用到的port
+```
+# netstat -tunlp | grep smb
+```
+
+* 使用445、139 port
+
+7. 建立SAMBA存取密碼  
+```
+# smbpasswd -a user
+```
+
+只要在Windows的檔案總管的路徑欄輸入`\\Linux IP`即可存取SAMBA server內容
 
 ----------
 [linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-1.png?raw=tru
