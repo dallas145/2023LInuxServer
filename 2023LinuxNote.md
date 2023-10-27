@@ -717,6 +717,23 @@ EOT(^D)
 
 * **若沒有正確架設則Gmail無法接收**
 
+### (2023/10/24)
+#### ipv6
+
+* 使用手機網路取得ipv6位址
+
+* 在Windows CMD or PowerShell使用`ping -6`來測試是否取得ipv6位址：  
+
+![linux1024-1][linux1024-1]
+
+* 即可使用ipv6位址連上linux系統的http伺服器：  
+
+![linux1024-2][linux1024-2]
+
+#### 課本
+
+##### alias - 別名
+
 ----------
 [linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
@@ -739,3 +756,5 @@ EOT(^D)
 [linux1017-2]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1017-2.png?raw=tru
 [linux1017-3]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1017-3.png?raw=tru
 [linux1017-4]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1017-4.png?raw=tru
+[linux1024-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1024-1.png?raw=tru
+[linux1024-2]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1024-2.png?raw=tru
