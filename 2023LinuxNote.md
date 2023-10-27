@@ -593,6 +593,129 @@ net use * /delete
 
 * 可使用`tr`指令將分割符號去除再使用`sort`排序
 
+##### uniq - 過濾重複
+ex:  
+```
+# cat doc
+2
+3
+3
+5
+7
+1
+5
+4
+6
+# sort doc
+1
+2
+3
+3
+4
+5
+5
+6
+7
+# sort doc | uniq
+1
+2
+3
+4
+5
+6
+7
+```
+
+##### cut - 擷取子字串
+ex:  
+```
+# cat doc
+tom, 22, 31000
+jack, 21, 29500
+eric, 18, 42000
+# cut -d',' -f 2 doc
+22
+21
+18
+```  
+
+* 裁切字串：  
+```
+# echo "12345" | cut -b2-4
+234
+```  
+
+* 產生隨機密碼：  
+```
+# echo $RANDOM | md5sum | cut -b1-8
+```  
+以上指令可產生隨機八位數密碼
+
+##### split - 分割檔案
+ex:  
+```
+# dd if=/dev/zero of=file3m bs=1M count=3
+3+0 records in
+3+0 records out
+3145728 bytes (3.1 MB) copied, 0.00227186 s, 1.4 GB/s
+# ls -h -l
+-rw-r--r-- 1 root root 3.0M Oct 17 03:59 file3m
+# split -b 1m file3m
+# ls -h -l
+-rw-r--r-- 1 root root 3.0M Oct 17 03:59 file3m
+-rw-r--r-- 1 root root 1.0M Oct 17 04:02 xaa
+-rw-r--r-- 1 root root 1.0M Oct 17 04:02 xab
+-rw-r--r-- 1 root root 1.0M Oct 17 04:02 xac
+```
+
+* 可使用`cat`進行還原：  
+```
+# cat 1.txt
+Hello1
+# cat 2.txt
+Hello2
+# cat 3.txt
+Hello3
+# cat 1.txt 2.txt 3.txt > original.txt
+Hello1
+Hello2
+Hello3
+```
+
+**補充**  
+可使用`diff`指令比較文件差異
+
+##### ping - 請求網路主機回應
+
+##### traceroute - 追蹤網路主機路徑
+
+##### hostname - 主機名稱
+```
+# hostname
+centos7-1
+```
+
+* 改變主機名稱：  
+```
+# hostnamectl set-hostname {hostname}
+```
+
+##### mail - 簡易電子郵件指令
+ex:  
+```
+# mail -s "test" s111010511@student.nqu.edu.tw
+This is a test.
+Testing.
+EOT(^D)
+```  
+
+* `-s` 為主旨
+
+* 主旨後為目標郵箱
+
+* 輸入郵箱後可編輯內文，結束後換行並按下`Ctrl + d`
+
+* **若沒有正確架設則Gmail無法接收**
 
 ----------
 [linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-1.png?raw=tru
