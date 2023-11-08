@@ -77,9 +77,9 @@
 ![midterm25][midterm25]
 
 
-[midterm01]: ../source/midterm01.png
-[midterm02]: ../source/midterm02.png
-[midterm03]: ../source/midterm03.png
+[midterm01]: source/midterm01.png
+[midterm02]: source/midterm02.png
+[midterm03]: source/midterm03.png
 [midterm04]: https://github.com/dallas145/2023LInuxServer/blob/main/source/midterm04.png?raw=tru
 [midterm05]: https://github.com/dallas145/2023LInuxServer/blob/main/source/midterm05.png?raw=tru
 [midterm06]: https://github.com/dallas145/2023LInuxServer/blob/main/source/midterm06.png?raw=tru
