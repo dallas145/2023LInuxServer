@@ -134,7 +134,7 @@ tr指令可將標準輸入字串的特定字元取代或刪除，並輸入取代
 
 * [參考資料：tr 命令，Linux tr 命令详解：将字符进行替换压缩和删除 -  Linux 命令搜索引擎](https://wangchujiang.com/linux-command/c/tr.html)
 
-* 測試1
+* 範例1
     ```
     # echo "ABCDEFG"
     ABCDEFG
@@ -142,7 +142,7 @@ tr指令可將標準輸入字串的特定字元取代或刪除，並輸入取代
     xyzDEFG
     ```
 
-* 測試2
+* 範例2
     ```
     # echo "ABCDEFG" | tr [:upper:] [:lower:]
     abcdefg
@@ -161,15 +161,15 @@ tr指令可將標準輸入字串的特定字元取代或刪除，並輸入取代
 
     * `[:lower:]`:代表所有小寫字母的集合
 
-* 測試3
+* 範例3
     ```
     # echo ABC | tr -d 'A'
     BC
-    ```
+    ```  
 
     * `-d`參數可刪除特定字元
 
-* 測試4
+* 範例4
     ```
     # cat test.txt
     hello world     
@@ -195,7 +195,7 @@ tr指令可將標準輸入字串的特定字元取代或刪除，並輸入取代
 
     * `\t`代表字串中的`tab`
 
-* 測試4
+* 範例5
     ```
     # echo aa.,a 1 b#$bb 2 c*/cc 3 ddd 4 | tr -d -c '0-9 \n'
     1  2  3  4
@@ -236,7 +236,7 @@ tr指令可將標準輸入字串的特定字元取代或刪除，並輸入取代
     2
     1
     0
-    ```
+    ```  
 
     * `-w`參數可補0讓每個數字一樣寬度
 
@@ -280,6 +280,235 @@ tr指令可將標準輸入字串的特定字元取代或刪除，並輸入取代
 
 * 可使用`tr`指令將分割符號去除再使用`sort`排序
 
+### uniq - 過濾重複
+* 使用範例：  
+    * 原內容
+    ```
+    # cat doc
+    2
+    3
+    3
+    5
+    7
+    1
+    5
+    4
+    6
+    ```
+
+    * 排序後
+    ```
+    # sort doc
+    1
+    2
+    3
+    3
+    4
+    5
+    5
+    6
+    7
+    ```
+    * 排序 + 過濾
+    ```
+    # sort doc | uniq
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    ```  
+
+### cut - 擷取子字串
+* 使用範例：
+    ```
+    # cat doc
+    tom, 22, 31000
+    jack, 21, 29500
+    eric, 18, 42000
+    # cut -d',' -f 2 doc
+    22
+    21
+    18
+    ```  
+
+    * 預設分割字元為TAB，使用`-d`參數可指定分割字元
+    * `-f`參數指定欄位
+
+* 裁切字串：  
+    ```
+    # echo "12345" | cut -b2-4
+    234
+    ```  
+
+* 產生隨機密碼：  
+    ```
+    # echo $RANDOM | md5sum | cut -b1-8
+    ```  
+    以上指令可產生隨機八位數密碼
+
+### split - 分割檔案
+* 使用範例：  
+    ```
+    # dd if=/dev/zero of=file3m bs=1M count=3
+    3+0 records in
+    3+0 records out
+    3145728 bytes (3.1 MB) copied, 0.00227186 s, 1.4 GB/s
+    # ls -h -l
+    -rw-r--r-- 1 root root 3.0M Oct 17 03:59 file3m
+    # split -b 1m file3m
+    # ls -h -l
+    -rw-r--r-- 1 root root 3.0M Oct 17 03:59 file3m
+    -rw-r--r-- 1 root root 1.0M Oct 17 04:02 xaa
+    -rw-r--r-- 1 root root 1.0M Oct 17 04:02 xab
+    -rw-r--r-- 1 root root 1.0M Oct 17 04:02 xac
+    ```
+
+* 可使用`cat`進行還原：  
+    ```
+    # cat 1.txt
+    Hello1
+    # cat 2.txt
+    Hello2
+    # cat 3.txt
+    Hello3
+    # cat 1.txt 2.txt 3.txt > original.txt
+    Hello1
+    Hello2
+    Hello3
+    ```
+
+    **補充**  
+    可使用`diff`指令比較文件差異
+
+### scp指令操作
+* `scp` `欲複製檔案` `貼上路徑`
+* ex: `scp /etc/hosts root@centos7-2:/etc/hosts`
+* ex: `scp -r root@centos7-2:/root/testdir/ /root/`
+* 圖片：
+![linux0919-3][linux0919-3]
+![linux0919-4][linux0919-4]
+
+### ssh
+#### 在一號機使用ssh連上二號機
+* 兩台虛擬機用ssh互連
+
+![linux0912-6][linux0912-6]
+
+#### ssh執行單一指令
+* `ssh [user]@[host] [command]`
+* ex: `ssh root@centos7-2 ls /root`
+
+#### 更改sshd port number
+* 修改`/etc/ssh/sshd_config`
+* 執行結果：
+![linux0919-5][linux0919-5]
+
+### mail - 簡易電子郵件指令
+* 使用範例：  
+```
+# mail -s "test" s111010511@student.nqu.edu.tw
+This is a test.
+Testing.
+EOT(^D)
+```  
+
+* `-s` 為主旨
+
+* 主旨後為目標郵箱
+
+* 輸入郵箱後可編輯內文，結束後換行並按下`Ctrl + d`
+
+* **若沒有架設郵件伺服器則Gmail無法接收**
+
+### alias - 別名
+* 為複雜指令取一個簡單的名稱：
+    ```
+    # alias
+    alias cp='cp -i'
+    alias l.='ls -d .* --color=auto'
+    alias ll='ls -l --color=auto'
+    alias ls='ls --color=auto'
+    alias mv='mv -i'
+    alias rm='rm -i'
+    alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --sho -tilde'
+    ```  
+* 直接執行會顯示已存在的別名
+
+* 在指令前加入`反斜線（\）`可以使用不使用別名
+
+* 新增別名：  
+範例：  
+    ```
+    alias la='ls -a -l'
+    ```
+
+* 刪除別名：  
+範例：  
+    ```
+    unalias la
+    ```  
+
+* 效果只會存在於當前終端機視窗（Session），若要永久生效可將其加入shell的配置檔如`~/.bashrc`檔案中
+
+* 若要將別名套用至整個系統則須修改`/etc/profile`檔案
+
+* 使用`echo $$`可以顯示當前行程pid
+
+### echo
+echo是一個印出指令（output），後面的文字會預設輸出在螢幕上  
+使用範例：    
+    ```
+    # echo welcome
+    welcome
+    # echo welcome to linux
+    welcome to linux
+    ```
+
+* **使用雙引號（"），若引號中的內容含有「$變數名稱」會將變數的值印出；單引號（'）則不會**
+
+* 特殊字元（須搭配`-e`參數）
+
+| 特殊字元 | 說明 |
+|:---:|:---:|
+| `\a` | 警示音（嗶） |
+| `\b` | backspace鍵 |
+| `\\` | 代表無特殊意義的反斜線 |
+| `\n` | 跳行字元 |
+| `\t` | 水平定位點，與tab鍵同義 |
+| `\v` | 垂直定位點 |
+| `\'` | 代表無特殊意義的單引號 |
+| `\"` | 代表無特殊意義的雙引號 |
+
+ex:  
+```
+# echo "hello\tworld"
+hello\tworld
+# echo -e "hello\tworld"
+hello   world
+```  
+
+ex2:  
+```
+# echo "line1\nline2\nline3"
+line1\nline2\nline3
+# echo -e "line1\nline2\nline3"
+line1
+line2
+line3
+```  
+
+### 將路徑加入環境變數（PATH）
+
+* 以將`~/bin`加入PATH為例：  
+    ```
+    export PATH=/home/user/bin:$PATH
+    ```  
+
+## bash script
+    
 ## 建立nfs伺服器
 
 1. Server端設置
@@ -510,6 +739,18 @@ net use * /delete
 
 * 結果展示：
 ![linux1017-3][linux1017-3]
+
+## ipv6網頁
+
+* 使用手機網路取得ipv6位址
+
+* 在Windows CMD or PowerShell使用`ping -6`來測試是否取得ipv6位址：  
+
+![linux1024-1][linux1024-1]
+
+* 即可使用ipv6位址連上linux系統的http伺服器：  
+
+![linux1024-2][linux1024-2]
 
 ----------
 [linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-1.png?raw=tru
