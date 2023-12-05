@@ -508,47 +508,134 @@ line3
     ```  
 
 ## bash script
+
+* bash預設變數（部份）
     
+    * `HOME`: 目前使用者的家目錄
+
+    * `IFS`: 用來分隔欄位的字元清單
+
+    * `PATH`: 用分號分隔的一連串目錄，代表執行指令時的搜尋路徑清單
+
+    * `USER`: 目前使用者帳號名稱
+
+    * `UID`: 目前使用者的uid
+
+    * `HISTFILE`: 儲存下過的指令清單的檔案位置
+
+    * `LANG`: 儲存使用者的語系
+
+    * `PWD`: 目前所在目錄名稱
+
+    * `RANDOM`: 每次取得變數資料，都會給一個0到32767的亂數
+
+* 新增變數
+    * 使用等於符號`=`，左邊是變數名稱，右邊可以是資料或運算式的結果
+        ```bash
+        > today="Fri"
+        > echo $today
+        Fri
+        ```
+        
+    * 若要精確使用變數，可用大括號`{}`將變數括起來
+        ```bash
+        > a=123
+        > echo $aa
+
+        > echo ${a}a
+        123a
+        ```
+        
+    * `read`是互動式的讀取資料指令，可以接收使用者輸入的資料，並放入變數中
+        * ex:
+        ```bash
+        > read -p "input a number: " number
+        input a number: 10
+        > echo $number
+        10
+        ```
+        
+        * ex2:
+        ```bash
+        > read -p "input your name: " name
+        input your name: tom
+        > echo $name
+        tom
+        ```
+    
+    * 指令結束狀態
+        * 指令執行後，必定會回傳一個「狀態結束碼」。指令正常結束時，狀態碼為「0」代表真值；指令錯誤或不正常結束，狀態碼為大於0的整數值。
+        * 特殊變數「`$?`」可以列出上一個指令執行後的結束狀態碼
+            ```bash
+            > a=5
+            > echo $?
+            0
+            > a =5
+            bash: a: command not found...
+            > echo $?
+            127
+            ```
+    
+    * test指令
+        * 檔案相關測試  
+
+        | 選項 | 說明 |
+        |:----:|:----:|
+        | `-d` 檔案 | 測試檔案是否為目錄 |
+        | `-e` 檔案 | 測試檔案是否存在 |
+        | `-s` 檔案 | 測試檔案大小是否大於0 |
+        | `-r` 檔案 | 測試檔案是否可讀 |
+        | `-w` 檔案 | 測試檔案是否可寫入 |
+        | `-x` 檔案 | 測試檔案是否可執行 |
+        | `-L` 檔案 | 測試檔案是否為連結 |  
+        
+    * 連結多個指令
+        * 可使用`&&`、`||`、`;`連續執行多個指令
+        
+        * 若`&&`前的指令執行失敗，`&&`後的指令不會執行；`||`則相反
+
+        * 若使用`;`，不管前面指令執行結果如何，後面的指令都會執行
+
 ## 建立nfs伺服器
 
 1. Server端設置
     * 安裝NFS
-
+    
     ```
     yum install nfs-utils
     ```
-
+    
     **安裝`nfs-utils`會自動安裝`rpcbind`**
-
+    
     * 設置NFS開機自動啟動
-
+    
     ```
     systemctl enable rpcbind
     systemctl enable nfs
     ```
-
+    
     * 啟動NFS
-
+    
     ```
     systemctl start rpcbind
     systemctl start nfs
     ```  
-
+    
     **課堂上使用的虛擬機為求實驗方便已將防火牆關閉，故無須設置防火牆**
-
+    
     * 設置共享目錄
     ```
     mkdir /data -p
     ```  
-
+    
     **`-p`參數表示若目錄存在不動作若不存在則建立目錄，即不產生錯誤訊息**
-
+    
     * 配置導出目錄
-
+    
     ```
     vim /etc/exports
     ```
-
+    
     * 在`/etc/exports`檔案中新增以下內容
 
     ```
@@ -753,7 +840,7 @@ net use * /delete
 ![linux1024-2][linux1024-2]
 
 ----------
-[linux0912-1]: ./source/linux0912-1.png?raw=tru
+[linux0912-1]: source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
 [linux0912-2]: ./source/linux0912-2.png?raw=tru
 [linux0912-3]: ./source/linux0912-3.png?raw=tru
