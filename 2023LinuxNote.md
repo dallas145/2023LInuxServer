@@ -858,31 +858,36 @@ ex:
 
 * RANDOM
     * 每次取得變數資料，都會給一個0到32767的亂數
+    * 產生隨機密碼：  
+    ```
+    # echo $RANDOM | md5sum | cut -b1-8
+    ```  
+    以上指令可產生隨機八位數密碼
 
 
         
 
 ----------
-[linux0912-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-1.png?raw=tru
+[linux0912-1]: ./source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
-[linux0912-2]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-2.png?raw=tru
-[linux0912-3]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-3.png?raw=tru
-[linux0912-4]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-4.png?raw=tru
-[linux0912-5]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-5.png?raw=tru
-[linux0912-6]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0912-6.png?raw=tru
-[linux0919-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0919-1.png?raw=tru
-[linux0919-2]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0919-2.png?raw=tru
-[linux0919-3]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0919-3.png?raw=tru
-[linux0919-4]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0919-4.png?raw=tru
-[linux0919-5]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0919-5.png?raw=tru
-[linux0926-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0926-1.png?raw=tru
-[linux0926-2]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0926-2.png?raw=tru
-[linux0926-3]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux0926-3.png?raw=tru
+[linux0912-2]: ./source/linux0912-2.png?raw=tru
+[linux0912-3]: ./source/linux0912-3.png?raw=tru
+[linux0912-4]: ./source/linux0912-4.png?raw=tru
+[linux0912-5]: ./source/linux0912-5.png?raw=tru
+[linux0912-6]: ./source/linux0912-6.png?raw=tru
+[linux0919-1]: ./source/linux0919-1.png?raw=tru
+[linux0919-2]: ./source/linux0919-2.png?raw=tru
+[linux0919-3]: ./source/linux0919-3.png?raw=tru
+[linux0919-4]: ./source/linux0919-4.png?raw=tru
+[linux0919-5]: ./source/linux0919-5.png?raw=tru
+[linux0926-1]: ./source/linux0926-1.png?raw=tru
+[linux0926-2]: ./source/linux0926-2.png?raw=tru
+[linux0926-3]: ./source/linux0926-3.png?raw=tru
 [htop_source]: https://src.fedoraproject.org/lookaside/extras/htop/htop-2.2.0.tar.gz/sha512/ec1335bf0e3e0387e5e50acbc508d0effad19c4bc1ac312419dc97b82901f4819600d6f87a91668f39d429536d17304d4b14634426a06bec2ecd09df24adc62e/
-[linux1003-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1003-1.png?raw=tru
-[linux1017-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1017-1.png?raw=tru
-[linux1017-2]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1017-2.png?raw=tru
-[linux1017-3]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1017-3.png?raw=tru
-[linux1017-4]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1017-4.png?raw=tru
-[linux1024-1]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1024-1.png?raw=tru
-[linux1024-2]: https://github.com/dallas145/2023LInuxServer/blob/main/source/linux1024-2.png?raw=tru
+[linux1003-1]: ./source/linux1003-1.png?raw=tru
+[linux1017-1]: ./source/linux1017-1.png?raw=tru
+[linux1017-2]: ./source/linux1017-2.png?raw=tru
+[linux1017-3]: ./source/linux1017-3.png?raw=tru
+[linux1017-4]: ./source/linux1017-4.png?raw=tru
+[linux1024-1]: ./source/linux1024-1.png?raw=tru
+[linux1024-2]: ./source/linux1024-2.png?raw=tru
