@@ -666,6 +666,30 @@ line3
             * 執行結果  
             ![linux1031][linux1031]
 
+        * for迴圈
+            ```bash
+            #!/usr/bin/bash
+
+            sum=0
+            for no in `seq 1 2 10`
+            do
+                echo $no
+                let sum=$sum+$no
+            done
+
+            echo "sum= $sum"
+            ```
+
+            執行結果：  
+            ```bash
+            > ./for.sh
+            1
+            3
+            5
+            7
+            9
+            sum= 25
+            ```
         
     * 連結多個指令
         * 可使用`&&`、`||`、`;`連續執行多個指令
@@ -673,6 +697,13 @@ line3
         * 若`&&`前的指令執行失敗，`&&`後的指令不會執行；`||`則相反
 
         * 若使用`;`，不管前面指令執行結果如何，後面的指令都會執行
+
+    * 參考資料：  
+        
+        1. [总结shell 中各种括号的用法 () (())、[]、[[]]、{}][shell_1]
+        2. [Bash Script 語法解析][shell_2]
+        3. [shell中的单括号[ ]、 双括号[[ ]] 和 test的区别][shell_3]
+        4. [shell-1脚本执行过程][shell_4]
 
 ## 建立nfs伺服器
 
@@ -942,3 +973,7 @@ net use * /delete
 [linux1024-1]: ./source/linux1024-1.png?raw=tru
 [linux1024-2]: ./source/linux1024-2.png?raw=tru
 [linux1031]: ./source/linux1031.png?raw=tru
+[shell_1]: https://blog.csdn.net/weixin_44794688/article/details/123138257
+[shell_2]: https://medium.com/vswe/bash-shell-script-cheat-sheet-15ce3cb1b2c7
+[shell_3]: https://blog.csdn.net/new_delete_/article/details/121160836
+[shell_4]: https://blog.csdn.net/jiushiggg/article/details/123166505
