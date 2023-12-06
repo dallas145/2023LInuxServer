@@ -631,6 +631,41 @@ line3
             > test $a -ne $b ; echo $?
             0
             ```  
+
+        * 腳本編寫練習
+            ```bash
+            #!/usr/bin/bash
+
+            no1=$1
+            no2=$2
+
+            if [ -z $no1 ]; then
+                read -p "input the first number: " no1
+                read -p "input the second number: " no2
+            elif [ -z $no2 ]; then
+                read -p "input the second number: " no2
+            fi
+
+            c1="$no1+$no2"
+            c2="$no1-$no2"
+            c3="$no1*$no2"
+            c4="$no1/$no2"
+            c41="scale=3 ; $c4"
+
+            plus=`echo -e $c1 | bc -l`
+            minus=`echo -e $c2 | bc -l`
+            mult=`echo -e $c3 | bc -l`
+            div=`echo -e $c41 | bc -l`
+
+            echo "$c1 = $plus"
+            echo "$c2 = $minus"
+            echo "$c3 = $mult"
+            echo "$c4 = $div"
+            ```
+
+            * 執行結果
+            ![linux1031][linux1031]
+
         
     * 連結多個指令
         * 可使用`&&`、`||`、`;`連續執行多個指令
@@ -906,3 +941,4 @@ net use * /delete
 [linux1017-4]: ./source/linux1017-4.png?raw=tru
 [linux1024-1]: ./source/linux1024-1.png?raw=tru
 [linux1024-2]: ./source/linux1024-2.png?raw=tru
+[linux1031]: ./source/linux1031.png?raw=tru
