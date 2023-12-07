@@ -948,6 +948,65 @@ net use * /delete
 
 ![linux1024-2][linux1024-2]
 
+## 建立VPN伺服器
+
+* 安裝pptp
+    ```bash
+    yum install ppp pptpd -y
+    ```
+
+* 搭建實驗環境
+    * 在虛擬機建立一個LAN網路，一號虛擬機的ip為 `192.168.10.1`，二號虛擬機的ip為 `192.168.10.2`
+    
+* 配置pptpd
+    * 編輯 `/etc/pptpd.conf`，加入以下內容：
+        ```bash
+        localip 192.168.10.1
+        remoteip 192.168.10.100-150
+        ```
+
+* 設置pptpd的使用者名稱及密碼
+    * 編輯 `/etc/ppp/chap-secrets`，加入以下內容：
+        ```bash
+        test pptpd 123456 * # <- test為連線名稱，123456是密碼
+        ```
+
+* 設置MTU
+    * 編輯 `/etc/ppp/ip-up`，如以下內容：
+        ```bash
+        /etc/ppp/ip-up. ipv6to4 ${LOGDEVICE}
+        [ -x /etc/ppp/ip-up.local ] && /etc/ppp/ip-up.local "$@"
+        ifconfig ppp0 mtu 1472  # <- 加入這行
+        ```
+        
+* 修改參數
+    * 修改 `/etc/sysctl.conf`，加入以下內容：
+        ```bash
+        net.ipv4.ip_forward = 1
+        ```
+    
+    * 執行 `sysctl -p`
+
+* 重啟pptpd
+    ```bash
+    systemctl restart pptpd
+    systemctl enable pptpd
+    ```
+
+* 在windows上設定連線
+
+    | 欄位 | 內容 |
+    |:----:|:----:|
+    | 連線名稱 | 自訂 |
+    | 伺服器名稱或位址 | 192.168.241.100 （centos7-1虛擬機的ip位址） |
+    | 使用者名稱 | test |
+    | 密碼 | 123456 |
+
+* 連線後測試
+    * 在windows使用`ipconfig`可以看到`ppp介面卡 test`
+    * 在windows可以ping到`centos7-1(192.168.10.1)`及`centos7-2(192.168.10.2)`
+    ![linux1114][linux1114]
+
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
@@ -977,3 +1036,4 @@ net use * /delete
 [shell_2]: https://medium.com/vswe/bash-shell-script-cheat-sheet-15ce3cb1b2c7
 [shell_3]: https://blog.csdn.net/new_delete_/article/details/121160836
 [shell_4]: https://blog.csdn.net/jiushiggg/article/details/123166505
+[linux1114]: ./source/linux1114.png?raw=tru
