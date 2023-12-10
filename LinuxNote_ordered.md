@@ -387,7 +387,7 @@ tr指令可將標準輸入字串的特定字元取代或刪除，並輸入取代
 * `scp` `欲複製檔案` `貼上路徑`
 * ex: `scp /etc/hosts root@centos7-2:/etc/hosts`
 * ex: `scp -r root@centos7-2:/root/testdir/ /root/`
-* 圖片：
+* 圖片：  
 ![linux0919-3][linux0919-3]
 ![linux0919-4][linux0919-4]
 
