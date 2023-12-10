@@ -577,7 +577,7 @@ line3
             127
             ```
     
-    * test指令
+    * test指令  
 
         * 檔案相關測試  
     
@@ -632,64 +632,64 @@ line3
             0
             ```  
 
-        * 腳本編寫練習
-            ```bash
-            #!/usr/bin/bash
+    * 腳本編寫練習
+        ```bash
+        #!/usr/bin/bash
 
-            no1=$1
-            no2=$2
+        no1=$1
+        no2=$2
 
-            if [ -z $no1 ]; then
-                read -p "input the first number: " no1
-                read -p "input the second number: " no2
-            elif [ -z $no2 ]; then
-                read -p "input the second number: " no2
-            fi
+        if [ -z $no1 ]; then
+            read -p "input the first number: " no1
+            read -p "input the second number: " no2
+        elif [ -z $no2 ]; then
+            read -p "input the second number: " no2
+        fi
 
-            c1="$no1+$no2"
-            c2="$no1-$no2"
-            c3="$no1*$no2"
-            c4="$no1/$no2"
-            c41="scale=3 ; $c4"
+        c1="$no1+$no2"
+        c2="$no1-$no2"
+        c3="$no1*$no2"
+        c4="$no1/$no2"
+        c41="scale=3 ; $c4"
 
-            plus=`echo -e $c1 | bc -l`
-            minus=`echo -e $c2 | bc -l`
-            mult=`echo -e $c3 | bc -l`
-            div=`echo -e $c41 | bc -l`
+        plus=`echo -e $c1 | bc -l`
+        minus=`echo -e $c2 | bc -l`
+        mult=`echo -e $c3 | bc -l`
+        div=`echo -e $c41 | bc -l`
 
-            echo "$c1 = $plus"
-            echo "$c2 = $minus"
-            echo "$c3 = $mult"
-            echo "$c4 = $div"
-            ```
+        echo "$c1 = $plus"
+        echo "$c2 = $minus"
+        echo "$c3 = $mult"
+        echo "$c4 = $div"
+        ```
 
-            * 執行結果  
-            ![linux1031][linux1031]
+        * 執行結果  
+        ![linux1031][linux1031]
 
-        * for迴圈
-            ```bash
-            #!/usr/bin/bash
+    * for迴圈
+        ```bash
+        #!/usr/bin/bash
 
-            sum=0
-            for no in `seq 1 2 10`
-            do
-                echo $no
-                let sum=$sum+$no
-            done
+        sum=0
+        for no in `seq 1 2 10`
+        do
+            echo $no
+            let sum=$sum+$no
+        done
 
-            echo "sum= $sum"
-            ```
+        echo "sum= $sum"
+        ```
 
-            執行結果：  
-            ```bash
-            > ./for.sh
-            1
-            3
-            5
-            7
-            9
-            sum= 25
-            ```
+        執行結果：  
+        ```bash
+        > ./for.sh
+        1
+        3
+        5
+        7
+        9
+        sum= 25
+        ```
         
     * 連結多個指令
         * 可使用`&&`、`||`、`;`連續執行多個指令
@@ -698,12 +698,76 @@ line3
 
         * 若使用`;`，不管前面指令執行結果如何，後面的指令都會執行
 
+    * 使用`{ }`操作變數：
+        * 調用變數：`${ }`
+            ```bash
+            > a=123
+            > echo ${a}
+            123
+            ``` 
+
+        * 取得部份字串/字元數：`${var:index:length}
+            ```bash
+            > a=123456789
+            > echo ${a:4:3}
+            567
+            ```
+
+        * 字串長度：`${#var}`
+            ```bash
+            > a=123456789
+            > echo ${#a}
+            9
+            ```
+
+        * 取代部份字串：`${var/source/destination}`
+            ```bash
+            > whoami
+            mikel
+            > greet="Hello World"
+            > echo ${greet/World/$(whoami)}
+            Hello mikel
+            ```
+
+    * 在迴圈使用`{ }`：
+        ```bash
+        # 遞增 1 ~ 10
+        for i in {1..10}; do
+            if (( i % 2 == 0 )); then
+                continue
+            fi
+            if (( i == 7 )); then
+                break
+            fi
+            echo "${i}" # print 1, 3, 5
+        done
+
+        # 改變 step
+        echo {0..10..2} # 0 2 4 6 8 10
+        ```
+        
+    * 使用`[ ]` 進行test：
+        * 與`test 指令`使用方法相同        
+        
+
     * 參考資料：  
         
         1. [总结shell 中各种括号的用法 () (())、[]、[[]]、{}][shell_1]
         2. [Bash Script 語法解析][shell_2]
         3. [shell中的单括号[ ]、 双括号[[ ]] 和 test的区别][shell_3]
         4. [shell-1脚本执行过程][shell_4]
+
+## 網路管理指令
+    
+    * 更改網路卡ip位址  
+    
+        ```bash
+        #ifconfig {網路卡名稱} 0
+        #ifconfig {網路卡名稱} {ip位址} netmask {網路遮罩}
+        #ex:
+        ifconfig ens33 0
+        ifconfig ens33 192.168.241.100 netmask 255.255.255.0
+        ```
 
 ## 建立nfs伺服器
 
