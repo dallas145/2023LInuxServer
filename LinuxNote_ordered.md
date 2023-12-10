@@ -757,17 +757,17 @@ line3
         3. [shell中的单括号[ ]、 双括号[[ ]] 和 test的区别][shell_3]
         4. [shell-1脚本执行过程][shell_4]
 
-## 網路管理指令
-    
-    * 更改網路卡ip位址  
-    
-        ```bash
-        #ifconfig {網路卡名稱} 0
-        #ifconfig {網路卡名稱} {ip位址} netmask {網路遮罩}
-        #ex:
-        ifconfig ens33 0
-        ifconfig ens33 192.168.241.100 netmask 255.255.255.0
-        ```
+## 網路管理指令  
+
+* 更改網路卡ip位址
+
+    ```bash
+    # ifconfig {網路卡名稱} 0
+    # ifconfig {網路卡名稱} {ip位址} netmask {網路遮罩}
+    # ex:
+    ifconfig ens33 0
+    ifconfig ens33 192.168.241.100 netmask 255.255.255.0
+    ```
 
 ## 建立nfs伺服器
 
