@@ -769,6 +769,30 @@ line3
     ifconfig ens33 192.168.241.100 netmask 255.255.255.0
     ```
 
+* 新增虛擬網路界面
+    
+    ```bash
+    ifconfig ens33:1 192.168.241.110 netmask 255.255.255.0
+    ```
+* [ip 指令 — 取代 ifconfig 的工具][ip-1]
+
+* 將`NetworkManager`服務替換為`network`
+    ```bash
+    sudo systemctl stop NetworkManager.service
+    sudo systemctl disable NetworkManager.service
+    sudo systemctl enable network
+    sudo systemctl start network
+    ```
+
+    * 配置檔位置：`/etc/sysconfig/network-scripts/`
+
+        * 參考文章：[CentOS Linux 靜態 IP 位址網路設定教學][ip-2]
+
+    * 成果展示：
+        ![linux1121-1][linux1121-1]  
+        ![linux1121-2][linux1121-2]  
+        ![linux1121-3][linux1121-3]  
+
 ## 建立nfs伺服器
 
 1. Server端設置
@@ -1101,3 +1125,8 @@ net use * /delete
 [shell_3]: https://blog.csdn.net/new_delete_/article/details/121160836
 [shell_4]: https://blog.csdn.net/jiushiggg/article/details/123166505
 [linux1114]: ./source/linux1114.png?raw=tru
+[ip-1]: https://www.ltsplus.com/linux/ip-command
+[ip-2]: https://blog.gtwang.org/linux/centos-linux-static-network-configuration-tutorial/
+[linux1121-1]: ./source/linux1121-1.png?raw=tru
+[linux1121-2]: ./source/linux1121-2.png?raw=tru
+[linux1121-3]: ./source/linux1121-3.png?raw=tru
