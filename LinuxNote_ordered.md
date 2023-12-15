@@ -1095,6 +1095,115 @@ net use * /delete
     * 在windows可以ping到`centos7-1(192.168.10.1)`及`centos7-2(192.168.10.2)`
     ![linux1114][linux1114]
 
+
+## 自行建立伺服器並設定讓systemd進行管理
+
+* 以python撰寫一個簡單的echo伺服器，儲存在`/opt/echo_server.py`  
+
+```python
+#!/usr/bin/env python3
+import socket
+
+# 建立socket
+serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# 綁定所有網路介面的9000連接埠
+serv.bind(('0.0.0.0', 9000))
+
+# 開始接受client連線
+serv.listen()
+
+while True:
+
+    # 接受client連線
+    conn, addr = serv.accept()
+    print('Client from', addr)
+
+    while True:
+    
+        # 接收資料
+        data = conn.recv(1024)
+
+        # 若無資料則離開
+        if not data: break
+
+        # 傳送資料
+        conn.send(data)
+
+    conn.close()
+    print('Client disconnected')
+```
+
+* `/opt/echo_server.py`建立完成後，開啟執行權限  
+    ```
+    chmod +x /opt/echo_server.py
+    ```
+
+* 手動測試
+    1. 啟動echo伺服器：  
+        ```
+        /opt/echo_server.py
+        ```  
+    
+    2. 開啟另一個終端機，使用`nc`指令連線至`9000`埠：
+        ```
+        nc localhost 9000
+        ```
+
+    * 若成功執行，送出文字後server端應該也會顯示client端的資訊，代表正常運作
+
+* 建立systemd服務單位設定檔
+    
+    1. 將以下內容儲存於`/etc/systemd/system/echo_server.service`
+        ```bash
+        [Unit]
+        Description=Echo Server
+
+        [Service]
+        Type=simple
+        ExecStart=/opt/echo_server.py
+        Restart=always
+
+        [Install]
+        WantedBy=multi-user.target
+        ```
+    
+    2. 權限設為`644`
+        ```bash
+        sudo chmod 644 /etc/systemd/system/echo_server.service
+        ```
+    
+    3. 重新載入systemd設定檔
+        ```bash
+        sudo systemctl daemon-reload
+        ```
+    
+    * 設定完成後即可用`systectl`啟動自訂的echo伺服器  
+        ```bash
+        sudo systemctl start echo_server
+        ```
+    
+    * 查看echo伺服器狀態  
+        ```bash
+        systemctl status echo_server
+        ```
+    
+    * 關閉echo伺服器  
+        ```bash
+        sudo systemctl stop echo_server
+        ```
+    
+    * 設定echo伺服器開機自動啟動  
+        ```bash
+        sudo systemctl enable echo_server
+        ```
+    
+    * 取消echo伺服器開機自動啟動  
+        ```bash
+        sudo systemctl disable echo_server
+        ```
+
+
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
