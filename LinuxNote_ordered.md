@@ -1203,6 +1203,40 @@ while True:
         sudo systemctl disable echo_server
         ```
 
+## telnet
+
+* 安裝`telnet-server`和`xinetd`
+    ```bash
+    yum install telnet-server
+    yum install telnet
+    yum install xinetd
+    ```
+
+* 設定開機自動啟動
+    ```bash
+    systemctl enable xinetd.service
+    systemctl enable telnet.socket
+    ```
+
+* 啟動服務
+    ```bash
+    systemctl start telnet.socket
+    systemctl start xinetd
+    ```
+    * **記得關閉防火牆**
+    
+* 修改配置檔，讓root可以遠端連線
+    ```bash
+    vim /etc/securetty
+    ```
+    * 在最後加上以下內容
+    ```bash
+    pst/0
+    pst/1
+    ```
+
+* 在windows使用`putty`或終端機裡的`telnet`進行測試：
+    ![linux1128][linux1128]
 
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
@@ -1239,3 +1273,4 @@ while True:
 [linux1121-1]: ./source/linux1121-1.png?raw=tru
 [linux1121-2]: ./source/linux1121-2.png?raw=tru
 [linux1121-3]: ./source/linux1121-3.png?raw=tru
+[linux1128]: ./source/linux1128.png?raw=tru
