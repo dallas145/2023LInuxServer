@@ -1290,8 +1290,8 @@ while True:
         ```
     * 加入資料
         ```
-        insert into addrbook(name, phone) values ("tom", "0912123456");
-        insert into addrbook(name, phone) values ("mary", "0912345678");
+        insert into addrbook(name, phone) values ("tom", "0912345678");
+        insert into addrbook(name, phone) values ("mary", "0934567890");
         ```
     * 顯示資料
         ```
@@ -1320,6 +1320,41 @@ while True:
     ```
     * 在瀏覽器打開`http://[your-ip]/info.php`，可以看到以下畫面
     ![linux1205-2][linux1205-2]
+    * 出現此頁面表示php正常工作；此頁面提供一些伺服器相關資訊，為避免內容被其他使用者看見，建議刪除，如果之後有需要可以在依上述步驟再次建立
+    ```
+    rm -rf /var/www/html/info.php
+    ```
+* 在`/var/www/html/`建立`testdb.php`
+    ```php
+    ?php
+    $servername="127.0.0.1";
+    $username="root";
+    $password="centos";
+    $dbname="testdb";
+
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if($conn->connect_error){
+            die("connection failed: ". $conn->connect_error);
+    }
+    else{
+            echo "connect OK!" . "<br>";
+    }
+
+    $sql="select name,phone from addrbook";
+    $result=$conn->query($sql);
+
+    if($result->num_rows>0){
+            while($row=$result->fetch_assoc()){
+                    echo "name: " . $row["name"] . "\tphone: " . $row["phone"] . "<br>";
+            }
+    } else {
+            echo "0 record";
+    }
+    ?>
+    ```
+    * `[your-ip]/testdb.php`
+    ![linux1205-3][linux1205-3]
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
@@ -1358,3 +1393,4 @@ while True:
 [linux1128]: ./source/linux1128.png?raw=tru
 [linux1205-1]: ./source/linux1205-1.png?raw=tru
 [linux1205-2]: ./source/linux1205-2.png?raw=tru
+[linux1205-3]: ./source/linux1205-3.png?raw=tru
