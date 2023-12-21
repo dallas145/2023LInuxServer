@@ -1371,6 +1371,22 @@ while True:
     * 在瀏覽器打開`[your-ip]/~user/`  
         ![linux1205-4][linux1205-4]
 
+* alias
+    * 在`httpd.conf`最後加上
+        ```
+        Alias /abc /data
+        <Directory /data>
+         Require all granted
+        </Directory>
+        ```
+    * 重啟`httpd`
+    * 在`/data`資料夾新增`hi.htm`
+        ```
+        Hello World!
+        ```
+    * 在瀏覽器打開`[your-ip]/abc/hi.htm`
+        ![linux1205-5][linux1205-5]
+
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
@@ -1411,3 +1427,4 @@ while True:
 [linux1205-2]: ./source/linux1205-2.png?raw=tru
 [linux1205-3]: ./source/linux1205-3.png?raw=tru
 [linux1205-4]: ./source/linux1205-4.png?raw=tru
+[linux1205-5]: ./source/linux1205-5.png?raw=tru
