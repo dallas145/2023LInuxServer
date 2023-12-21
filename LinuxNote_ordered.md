@@ -1355,6 +1355,22 @@ while True:
     ```
     * `[your-ip]/testdb.php`  
     ![linux1205-3][linux1205-3]
+
+## 設定Apache
+* 設定檔位置`/etc/httpd/conf/httpd.conf`
+
+* 使用者首頁
+    * 修改`/etc/httpd/conf.d/userdir.conf`  
+        * 將`UserDir disabled`改為`UserDir enabled`
+        * 將`UserDir public_html`取消註解
+    * 在`/home/user/`建立`public_html`資料夾
+    * 在`public_html`內建立`index.html`
+        ```
+        Hello World`!
+        ```
+    * 在瀏覽器打開`[your-ip]/~user/`
+        ![linux1205-4][linux1205-4]
+
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
@@ -1394,3 +1410,4 @@ while True:
 [linux1205-1]: ./source/linux1205-1.png?raw=tru
 [linux1205-2]: ./source/linux1205-2.png?raw=tru
 [linux1205-3]: ./source/linux1205-3.png?raw=tru
+[linux1205-4]: ./source/linux1205-4.png?raw=tru
