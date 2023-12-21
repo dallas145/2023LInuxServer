@@ -1238,6 +1238,88 @@ while True:
 * 在windows使用`putty`或終端機裡的`telnet`進行測試：
     ![linux1128][linux1128]
 
+
+
+## mysql
+
+* 安裝
+    ```
+    yum install mariadb-server mariadb
+    ```
+
+* 啟動
+    ```
+    systemctl start mariadb
+    ```
+
+* 設定
+    ```
+    mysql_secure_installation
+    ```
+    
+    * 設定`root`密碼
+    
+    * 除了`Disallow root login remotely`和`Remove test database and access to it`選`n`以外，其他都按`Enter`跳過
+
+* enable
+    ```
+    systemctl enable mariadb
+    ```
+
+* open
+    ```
+    mysql -u root -p
+    ```
+
+* 常用指令
+    * 顯示資料庫
+        ```
+        show databases;
+        ```
+    * 創建資料庫
+        ```
+        create database testdb;
+        ```
+    * 使用資料庫
+        ```
+        use testdb;
+        ```
+    * 創建資料表
+        ```
+        create table addrbook(name varchar(50) not null, phone char(10));
+        ```
+    * 加入資料
+        ```
+        insert into addrbook(name, phone) values ("tom", "0912123456");
+        insert into addrbook(name, phone) values ("mary", "0912345678");
+        ```
+    * 顯示資料
+        ```
+        select * from addrbook;
+        ```
+    ![linux1205-1][linux1205-1]
+
+## php
+
+* 安裝
+    ```
+    yum install php php-mysql php-fpm
+    ```
+* 重新啟動Apache
+    ```
+    systemctl restart httpd.service
+    ```
+* 測試php
+    * 在`/var/www/html/`建立`info.php`
+    ```
+    vim /var/www/html/info.php
+    ```
+    * 內容
+    ```
+    <?php phpinfo(); ?>
+    ```
+    * 在瀏覽器打開`http://[your-ip]/info.php`，可以看到以下畫面
+    ![linux1205-2][linux1205-2]
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
@@ -1274,3 +1356,5 @@ while True:
 [linux1121-2]: ./source/linux1121-2.png?raw=tru
 [linux1121-3]: ./source/linux1121-3.png?raw=tru
 [linux1128]: ./source/linux1128.png?raw=tru
+[linux1205-1]: ./source/linux1205-1.png?raw=tru
+[linux1205-2]: ./source/linux1205-2.png?raw=tru
