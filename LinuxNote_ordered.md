@@ -1384,7 +1384,7 @@ while True:
         ```
         Hello World!
         ```
-    * 在瀏覽器打開`[your-ip]/abc/hi.htm`
+    * 在瀏覽器打開`[your-ip]/abc/hi.htm`  
         ![linux1205-5][linux1205-5]
 
 ----------
