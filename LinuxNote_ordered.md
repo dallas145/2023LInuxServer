@@ -1387,6 +1387,7 @@ while True:
     * 在瀏覽器打開`[your-ip]/abc/hi.htm`  
         ![linux1205-5][linux1205-5]
 
+
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
