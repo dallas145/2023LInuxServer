@@ -1318,7 +1318,7 @@ while True:
     ```
     <?php phpinfo(); ?>
     ```
-    * 在瀏覽器打開`http://[your-ip]/info.php`，可以看到以下畫面
+    * 在瀏覽器打開`http://[your-ip]/info.php`，可以看到以下畫面  
     ![linux1205-2][linux1205-2]
     * 出現此頁面表示php正常工作；此頁面提供一些伺服器相關資訊，為避免內容被其他使用者看見，建議刪除，如果之後有需要可以在依上述步驟再次建立
     ```
@@ -1353,7 +1353,7 @@ while True:
     }
     ?>
     ```
-    * `[your-ip]/testdb.php`
+    * `[your-ip]/testdb.php`  
     ![linux1205-3][linux1205-3]
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
