@@ -1451,6 +1451,14 @@ while True:
                 </Directory>
                 ```
                 ![linux1212][linux1212]
+            * FollowSymLinks  
+                如果目錄內有符號連結，允許網頁連結至該符號連結的目的地目錄，有安全性問題，不建議使用
+        * AllowOverride  
+            設定目錄下的子目錄是否能推翻上層目錄的選項設定
+            * All  
+                允許子目錄自訂所有選項
+            * None  
+                不允許子目錄自訂選項
 
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
