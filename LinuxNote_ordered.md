@@ -1459,6 +1459,32 @@ while True:
                 允許子目錄自訂所有選項
             * None  
                 不允許子目錄自訂選項
+    * 帳號密碼驗證
+        * 設定目錄權限
+            ```bash
+            <Directory /var/www/html/files>
+             AllowOverride AuthConfig
+            </Directory>
+            ```
+        * 在目錄中建立`.htpasswd`檔案
+            ```bash
+            > htpasswd -c .htpasswd tom # 第一次使用-c參數
+            New password:
+            Re-type new password:
+            Adding password for user tom
+
+            ```
+        * 在目錄中建立`.htaccess`檔案，內容如下
+            ```bash
+            AuthType Basic # Basic 代表使用由htpasswd指令產生的密碼檔為驗證依據
+            AuthName "Private File Area" # 驗證的名字，顯示在對話框上的文字
+            AuthUserFile /var/www/html/files/.htpasswd # 驗證使用的密碼檔，必須包括所在目錄
+            Require valid-user # 可通過的帳號，valid-user表示所有帳號
+            ```
+        * 重啟httpd
+            ```bash
+            systemctl restart httpd
+            ```
 
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
