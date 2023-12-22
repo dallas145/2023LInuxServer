@@ -1387,6 +1387,70 @@ while True:
     * 在瀏覽器打開`[your-ip]/abc/hi.htm`  
         ![linux1205-5][linux1205-5]
 
+* 存取對象控制
+    * 標籤格式
+        * 目錄
+            ```bash
+            <Directory 目錄>
+             指令1
+             指令2
+            </Directory>
+            ```
+        * 檔案
+            ```bash
+            <Files 檔案名稱>
+             指令1
+             指令2
+            </Files>
+            ```
+        * 舊版範例
+            * 限定ip
+            ```bash
+            <Directory /var/www/html/a>
+             Order deny,allow
+             Deny from all
+             Allow from 192.168.241.1 192.168.241.103 # 僅限這兩個ip可以存取
+            </Directory>
+            ```
+            * 封鎖ip
+            ```bash
+            <Directory /var/www/html/a>
+             Order allow,deny
+             Allow from all
+             Deny from 192.168.241.1 192.168.241.103 # 僅限這兩個ip不能存取
+            </Directory>
+            ```
+        * 新版範例
+            * 限定ip
+            ```bash
+            <Directory /var/www/html/b>
+             Require all denied
+             Require ip 192.168.241.1 192.168.241.103 # 僅限這兩個ip可以存取
+            </Directory>
+            ```
+            * 封鎖ip
+            ```bash
+            <Directory /var/www/html/b>
+            <RequireAll>
+             Require all granted
+             Require not ip 192.168.241.1 192.168.241.103 # 僅限這兩個ip不能存取
+            </RequireAll>
+            </Directory>
+            ``` 
+    * 存取選項
+        * Options
+            * None  
+                代表不使用所有選項
+            * Indexes  
+                若目錄中沒有`index.html`等預設文件，會啟動自動檔案清單，列出該目錄的檔案清單，例如：
+                ```bash
+                Alias /abc /test_data
+                <Directory /test_data>
+                 Require all granted
+                 Options Indexes
+                </Directory>
+                ```
+                ![linux1212][linux1212]
 
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
@@ -1429,3 +1493,4 @@ while True:
 [linux1205-3]: ./source/linux1205-3.png?raw=tru
 [linux1205-4]: ./source/linux1205-4.png?raw=tru
 [linux1205-5]: ./source/linux1205-5.png?raw=tru
+[linux1212]: ./source/linux1212.png?raw=tru
