@@ -1486,6 +1486,40 @@ while True:
             systemctl restart httpd
             ```
 
+## FTP server
+* Client
+    * 安裝  
+        ```bash
+        yum install ftp
+        ```
+    * 常用指令
+        | 指令 | 說明 |
+        |:----:|:----:|
+        | `ls` | 列出目前目錄下的檔案清單 |
+        | `cd` | 切換目錄 |
+        | `get` | 下載伺服器上的檔案到用戶端 |
+        | `put` | 將用戶端的檔案上傳到伺服器上 |
+        | `asc` | 設定傳輸格式為ASCII文字模式 |
+        | `bin` | 設定傳輸格式為二進制模式（binary模式） |
+        | `mkdir` | 在伺服器上建立新目錄 |
+        | `pwd` | 顯示目前工作目錄的名稱 |
+        | `quit` | 結束連線，離開ftp |
+    * 使用方式
+        ```bash
+        ftp [ip address | hostname]
+        ```
+    * 匿名登入
+        * 使用者名稱輸入`ftp`或`anonymous`
+        * 密碼不用輸入直接暗Enter
+
+* Server
+    * 安裝
+        ```bash
+        yum install vsftpd
+        ```
+    * 預設**ftp**根目錄在`/var/ftp`
+    * 其他設定參考課本16-3
+
 ----------
 [linux0912-1]: source/linux0912-1.png?raw=tru
 [rpm_package_manager]: https://zh.wikipedia.org/zh-tw/RPM套件管理員 
