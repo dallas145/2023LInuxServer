@@ -205,8 +205,8 @@
 
 6. 使用`rmmod hello`移除模組
 
-7. 使用`dmesg`檢查是否成功
-    ![](source/linux0306-2.png)
+7. 使用`dmesg`檢查是否成功  
+    ![](source/linux0306-2.png)  
 
 * 發現如下圖錯誤  
     ![](source/linux0306-3.png)  
