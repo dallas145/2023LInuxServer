@@ -88,6 +88,77 @@
 > [Linux内核模块管理：lsmod、insmod、rmmod、modinfo、modprobe、depmod命令详解][linuxModuleManagement]  
 > [核心模組的載入與移除：insmod,modprobe,rmmod][linuxModuleManagement1]
 
+## Week 2 (2024/02/28)
+
+***放假***
+
+## Week 3 (2024/03/06)
+
+### 網頁翻譯擴充元件
+
+* [沈浸式翻譯：雙語對照網頁翻譯＆PDF文檔翻譯](https://chromewebstore.google.com/detail/immersive-translate-web-p/bpoadfkcbjbfhfodiogcnhhhpibjhbnh?utm_source=ext_app_menu)
+
+### Nmap
+
+使用Nmap掃描網路
+
+* [Nmap入門教學](https://medium.com/璿的筆記本/nmap-入門教學-36ed094d6ef8)
+
+### 使用Hydra攻擊ssh伺服器
+
+* [Centos7安裝Hydra](https://www.cnblogs.com/ellisonzhang/p/13440614.html)
+
+**後面太麻煩我就沒做了（攻擊的部份）**
+
+### 關閉ssh的帳號密碼登入,讓使用者採用rsa key進行登入
+
+1. 在client端產生ssh rsa key（如果沒有的話）
+    ```
+    ssh-keygen
+    ```
+
+2. 將client端的公鑰複製到server端  
+    * ex:
+        ```
+        scp ~/.ssh/id_rsa.pub user@192.168.241.100:/home/user/.ssh/centos7-1.pub
+        ```
+
+3. 在server端更改`authorized_keys`檔案  
+    * ex:
+        ```
+        cat .ssh/centos7-1.pub >> authorized_keys
+        ```
+
+4. 關閉ssh伺服器的密碼驗證功能（server端）
+    * 修改`/etc/ssh/sshd_config`，其中的：
+        ```
+        PasswordAuthentication yes
+        ```
+        將`yes`改為`no`  
+        存檔後重啟sshd  
+        ```
+        systemctl restart sshd
+        ```
+
+* 若**無法登入**：
+    1. 檢查`selinux` and `firewalld`
+    2. 檢查`.ssh`資料夾及`authorized_keys`檔案權限
+        * `.ssh` 權限須為`700`
+        * `authorized_keys`權限須為`600`
+    3. 檢查server端的家目錄權限，須為`755`
+        * ex:  
+            ```
+            drwxr-xr-x. 34 user user 4096 Mar 15 16:18 /home/user
+            ```
+
+* 參考資料：[SSH Authentication Refused: Bad Ownership or Modes for Directory](https://chemicloud.com/kb/article/ssh-authentication-refused-bad-ownership-or-modes-for-directory/)
+
+#### 練習
+
+使用`powershell 7`以進行`ssh`連線  
+方法相同  
+![](source/linux0306.png)
+
 -----
 
 [linuxModuleManagement]: https://blog.csdn.net/yangjizhen1533/article/details/112239092
