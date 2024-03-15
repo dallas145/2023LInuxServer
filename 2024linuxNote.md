@@ -208,10 +208,9 @@
 7. 使用`dmesg`檢查是否成功
     ![](source/linux0306-2.png)
 
-* 發現如下圖錯誤
-    ![](source/linux0306-3.png)
-    進入`/usr/src/kernels/`檢查有沒有相應的內核開發工具，如果沒有
-
+* 發現如下圖錯誤  
+    ![](source/linux0306-3.png)  
+    進入`/usr/src/kernels/`檢查有沒有相應的內核開發工具，如果沒有  
     ```sh
     UNAME=$(uname -r)
     yum install gcc kernel-devel-${UNAME%.*}
