@@ -159,6 +159,77 @@
 方法相同  
 ![](source/linux0306.png)
 
+### linux 驅動程式 hello world
+
+1. 建立`hello`資料夾
+
+2. 建立`hello/hello.c`檔案
+    ```c
+    #include <linux/init.h>
+    #include <linux/module.h>
+
+    MODULE_DESCRIPTION("Hello_world");
+    MODULE_LICENSE("GPL");
+
+    static int hello_init(void)
+    {
+            printk(KERN_INFO "Hello world !\n");
+                return 0;
+    }
+
+    static void hello_exit(void)
+    {
+            printk(KERN_INFO "ByeBye !\n");
+    }
+
+    module_init(hello_init);
+
+    module_exit(hello_exit);
+    ```
+
+3. 建立`hello/Makefile`檔案
+    ```make
+    obj-m += hello.o
+    KVERSION := $(shell uname -r)
+
+    all:
+        $(MAKE) -C /lib/modules/$(KVERSION)/build M=$(PWD) modules
+
+    clean:
+        $(MAKE) -C /lib/modules/$(KVERSION)/build M=$(PWD) clean
+    ```
+
+4. 在`hello`資料夾中使用`make`指令
+
+5. 使用`insmod {path/to/hello/hello.ko}`指令載入模組
+
+6. 使用`rmmod hello`移除模組
+
+7. 使用`dmesg`檢查是否成功
+    ![](source/linux0306-2.png)
+
+* 發現如下圖錯誤
+    ![](source/linux0306-3.png)
+    進入`/usr/src/kernels/`檢查有沒有相應的內核開發工具，如果沒有
+
+    ```sh
+    UNAME=$(uname -r)
+    yum install gcc kernel-devel-${UNAME%.*}
+    ```
+
+**記得要使用新版gcc**  
+* gcc更新指令：  
+    ```sh
+    yum -y install centos-release-scl
+    yum -y install devtoolset-7-gcc devtoolset-7-gcc-c++ devtoolset-7-binutils
+    scl enable devtoolset-7 bash
+    ```  
+
+* 參考資料：
+    * [[Linux Kernel] 撰寫簡單 Hello, World module (part 1).](https://blog.wu-boy.com/2010/06/linux-kernel-driver-撰寫簡單-hello-world-module-part-1%2f)
+    * [make: \*** /lib/modules/3.10.0-693.el7.x86_64/build: 没有那个文件或目录](https://blog.csdn.net/u012343297/article/details/79141878)
+
+
 -----
 
 [linuxModuleManagement]: https://blog.csdn.net/yangjizhen1533/article/details/112239092
