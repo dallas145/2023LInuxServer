@@ -112,6 +112,9 @@
 
 ### 關閉ssh的帳號密碼登入,讓使用者採用rsa key進行登入
 
+> server -> `centos7-2`, ip: 192.168.241.101  
+> client -> `centos7-1`, ip: 192.168.241.100
+
 1. 在client端產生ssh rsa key（如果沒有的話）
     ```
     ssh-keygen
@@ -228,6 +231,80 @@
     * [[Linux Kernel] 撰寫簡單 Hello, World module (part 1).](https://blog.wu-boy.com/2010/06/linux-kernel-driver-撰寫簡單-hello-world-module-part-1%2f)
     * [make: \*** /lib/modules/3.10.0-693.el7.x86_64/build: 没有那个文件或目录](https://blog.csdn.net/u012343297/article/details/79141878)
 
+## Week 4 (2023/03/13)
+
+### WebDAV
+
+1. `yum install -y epel-release httpd`
+2. `httpd -M | grep dav`  
+    確定有這三個模組  
+    ```
+    dav_module
+    dav_fs_module
+    dav_lock_module
+    ``` 
+3. `mkdir /var/www/html/webdav`
+4. `cd /var/www/html/webdav`
+5. `touch {a..d}.txt`
+6. `vim /etc/httpd/conf.d/webdav.conf`
+    ```apacheconf
+    DavLockDB /var/www/html/DavLock
+    <VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html/webdav/
+        ErrorLog /var/log/httpd/error.log
+        CustomLog /var/log/httpd/access.log combined
+        Alias /webdav /var/www/html/webdav
+        <Directory /var/www/html/webdav>
+            DAV On
+            #AuthType Basic
+            #AuthName "webdav"
+            #AuthUserFile /etc/httpd/.htpasswd
+            #Require valid-user
+        </Directory>
+    </VirtualHost>
+    ```
+7. `chmod -R 755 /var/www/html` 變更資料夾權限  
+8. `chown -R apache:apache /var/www/html` 變更資料夾擁有者  
+9. `systemctl restart httpd.service` 重啟伺服器  
+
+* 使用Windows檔案總管連線存取  
+    1. 在`本機`按右鍵，選擇`連線網路磁碟機...`  
+        ![](source/linux0313.png)  
+    2. 選擇磁碟機代號並輸入伺服器ip
+        ![](source/linux0313-2.png)
+
+* 使用另一台linux虛擬機連線存取  
+    1. 安裝`davfs2`  
+        ```bash
+        yum install -y davfs2
+        ```
+    2. 掛載WebDAV磁碟  
+        ```bash
+        mkdir /cloud
+        mount -t davfs http://192.168.241.101 /cloud
+        ```
+
+* 掛載範例  
+    windows:  
+    ![](source/linux0313-3.png)  
+    
+    linux:  
+    ![](source/linux0313-4.png)
+
+* 參考資料：  
+    [學姐筆記](https://hackmd.io/@jenny126/By8OS6Fas/%2FiiMobAxzR3--0JSa_JNwVw)  
+    [Linux将WebDAV为本地磁盘](https://blog.lincloud.pro/archives/36.html)
+
+### linux 三劍客： `awk`, `grep`, `sed`
+
+#### sed
+
+* 參考資料：  
+    [學姐筆記](https://hackmd.io/@jenny126/By8OS6Fas/%2FiiMobAxzR3--0JSa_JNwVw#Windows-Sedstream-editor)  
+    [Linux sed 字串取代用法與範例](https://shengyu7697.github.io/linux-sed/)  
+    [Linux 以 sed 指令搜尋、取代檔案內容教學與範例](https://officeguide.cc/linux-sed-find-and-replace-text-in-file-tutorial-examples/)  
+    [Linux 指令 SED 用法教學、取代範例、詳解](https://terryl.in/zh/linux-sed-command/)  
 
 -----
 
