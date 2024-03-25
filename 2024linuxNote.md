@@ -306,6 +306,33 @@
     [Linux 以 sed 指令搜尋、取代檔案內容教學與範例](https://officeguide.cc/linux-sed-find-and-replace-text-in-file-tutorial-examples/)  
     [Linux 指令 SED 用法教學、取代範例、詳解](https://terryl.in/zh/linux-sed-command/)  
 
+## Week 5 (2024/03/20)
+
+### 通配符/萬用字元 (Wildcard character)
+
+* **通配符**用來批配檔案名稱，**正則表達式**用來匹配內容
+
+| 通配符 | 作用 |
+| :--- | :--- |
+| `?` | 匹配一個任意字元 |
+| `*` | 匹配零個或一個或多個任意字元 |
+| `[]` | 匹配單個範圍內的任意字元 |
+
+* ex:  
+    ![](source/linux0320-1.png)
+
+* 參考資料：[通配符| Linux基础概要](https://abcfy2.gitbooks.io/linux_basic/content/first_sense_for_linux/command_learning/wildcard.html)
+
+### 正則表達式/正規表示式 (Regular Expression / RE)
+
+* ex: 找出系統的帳號  
+    ```bash
+    grep -n nologin$ /etc/passwd
+    ```
+    ![](source/linux0320-2.png)
+
+* 參考資料：[linux 正则表达式详解](https://cloud.tencent.com/developer/article/1683785), [正規表示式-維基百科](https://zh.wikipedia.org/wiki/正则表达式)
+
 -----
 
 [linuxModuleManagement]: https://blog.csdn.net/yangjizhen1533/article/details/112239092
