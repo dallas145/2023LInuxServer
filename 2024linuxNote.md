@@ -333,6 +333,33 @@
 
 * 參考資料：[linux 正则表达式详解](https://cloud.tencent.com/developer/article/1683785), [正規表示式-維基百科](https://zh.wikipedia.org/wiki/正则表达式)
 
+### linux 三劍客： `awk`, `grep`, `sed` - 2
+
+#### grep
+
+看[上面](#正則表達式正規表示式-regular-expression--re)
+
+#### sed
+
+取代用法類似於`vim`的搜尋並取代字串  
+
+* 參考資料：[Linux文字三劍客超詳細教學---grep、sed、awk](https://tw511.com/a/01/11537.html)
+
+#### awk
+
+* 參考資料：[【CHT智能稅務案】教學筆記 03：awk 指令介紹](https://hackmd.io/@cht-fia-project/ryuiv7O2Y)
+
+#### 練習
+
+Windows Powershell 中的 `Get-Process`指令輸出格式為：  
+![](source/linux0320-4.png)  
+
+* 先用`sed`得到`Get-Process`指令的目標欄位位置（`process name`和`pid`），再用`grep`和`awk`指令找到`process name`為 **pythonw** 的 `pid`  
+    ![](source/linux0320-3.png)
+
+* 更簡單的方法：  
+    ![](source/linux0320-5.png)  
+
 -----
 
 [linuxModuleManagement]: https://blog.csdn.net/yangjizhen1533/article/details/112239092
