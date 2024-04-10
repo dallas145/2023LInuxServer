@@ -360,6 +360,39 @@ Windows Powershell 中的 `Get-Process`指令輸出格式為：
 * 更簡單的方法：  
     ![](source/linux0320-5.png)  
 
+## Week 6 (2024/03/27)
+### Docker
+#### 安裝最新版：  
+##### Uninstall old versions:  
+```bash
+sudo yum remove docker \
+                docker-client \
+                docker-client-latest \
+                docker-commom \
+                docker-latest \
+                docker-latest-logrotate \
+                docker-logrotate \
+                docker-engine
+```  
+
+##### Install from rpm repository:  
+> Set up the repository
+```bash
+sudo yum install -y yum-utiils
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+```  
+
+> Install Docker Engine
+```bash
+sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```  
+
+#### 開啟Docker服務
+```bash
+sudo systemctl enable docker
+sudo systemctl start docker
+```  
+
 -----
 
 [linuxModuleManagement]: https://blog.csdn.net/yangjizhen1533/article/details/112239092
