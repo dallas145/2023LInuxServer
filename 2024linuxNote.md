@@ -460,6 +460,13 @@ sudo docker run hello-world
 
 * 建立image 
 
+* 參考資料
+  * [[Day6]-新手學Docker 0x2](https://ithelp.ithome.com.tw/articles/10241572)
+  * [快速建立你的第一個Docker服務](https://joshhu.gitbooks.io/dockercommands/content/Containers/DockerRun.html)
+  * [了解 docker run 指令](https://ithelp.ithome.com.tw/articles/10239672)
+  * [为什么在 docker 中运行 apache 时总离不开“-D FOREGROUND”？](https://wangyiguo.medium.com/为什么在-docker-中运行-apache-时总离不开-d-foreground-76dcd8c86f17)
+ 
+
 -----
 
 [linuxModuleManagement]: https://blog.csdn.net/yangjizhen1533/article/details/112239092
