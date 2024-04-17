@@ -393,6 +393,73 @@ sudo systemctl enable docker
 sudo systemctl start docker
 ```  
 
+#### 測試是否安裝成功
+```bash
+sudo docker run hello-world
+```
+
+#### Docker 常用指令
+* **Docker 指令都要在管理員權限下執行**
+
+* 下載image:  
+    ```bash
+    docker pull [user_name/]{repo_name}[:tag]
+    ```
+
+* 完整的Docker image名稱格式：  
+    `registry_name/user_name/repo_name:tag`  
+    預設的`Registry`是官方的`Docker Hub`  
+    官方的映像檔（如`apache`、`ubuntu`等）的名稱格式通常只會有`repo_name`和`tag`
+
+* 建立並執行container  
+    ```bash
+    docker run [-i] [-t] [-d] [--name] [--rm] [-p] [-v] {image} [command] [args]
+    ```
+    * `-i`：`--interactive`，開啟標準輸入。
+    * `-t`：連接終端機。
+    * `-d`：背景執行。
+    * `--name`：指定container名稱。
+    * `--rm`：退出container後自動刪除。
+    * `-p`：連接埠號。
+    * `-v`：掛載路徑。  
+
+    * ex:
+        ```bash
+        docker run -d --rm -p 8000:80 -v /web:/var/www/html centos7:httpd2 /usr/sbin/apachectl -DFOREGROUND
+        ```
+        > 建立並啟動`centos7:httpd2`，背景執行，離開後自動刪除，連接主機`8000 port`到容器的`80 port`，掛載主機的`/web`路徑到容器的`/var/www/html`路徑，執行`/usr/sbin/apachectl`（開啟apache伺服器），`-DFOREGROUND`使apache 伺服器在容器內的前景執行，讓容器不會自動關閉。  
+
+* 執行已建立的container
+    ```bash
+    docker start {container_name}
+    ```
+
+* 進入可互動的container
+    ```bash
+    docker attach {container name}
+    ```
+
+* 離開互動中的container  
+    `Ctrl + p` -> `Ctrl + q`
+
+* 列出執行中的container
+    ```bash
+    docker ps [-a] [-q]
+    ```
+    * `-a`：列出未執行的container
+    * `-q`：只列出container id
+
+* 停止執行中的container
+    ```bash
+    docker stop {container id or name}
+    ```  
+    停止所有執行中的container  
+    ```bash
+    docker stop `docker ps -q`
+    ```
+
+* 建立image 
+
 -----
 
 [linuxModuleManagement]: https://blog.csdn.net/yangjizhen1533/article/details/112239092
