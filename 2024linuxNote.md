@@ -458,7 +458,14 @@ sudo docker run hello-world
     docker stop `docker ps -q`
     ```
 
-* 建立image 
+* 將容器commit為image  
+    ```
+    docker commit {container name or id} {image name:tag}
+    ```  
+    ex:  
+    ```
+    docker commit mybusybox1 mybusybox:test
+    ```
 
 * 參考資料
   * [[Day6]-新手學Docker 0x2](https://ithelp.ithome.com.tw/articles/10241572)
