@@ -473,6 +473,14 @@ sudo docker run hello-world
   * [了解 docker run 指令](https://ithelp.ithome.com.tw/articles/10239672)
   * [为什么在 docker 中运行 apache 时总离不开“-D FOREGROUND”？](https://wangyiguo.medium.com/为什么在-docker-中运行-apache-时总离不开-d-foreground-76dcd8c86f17)
  
+## Week 7 (2024/04/04)
+***春假***
+
+## Week 8 (2024/04/10)
+### Docker 續
+
+* `docker run -e` 參數  
+    將環境變數傳入容器
 
 -----
 
