@@ -482,6 +482,14 @@ sudo docker run hello-world
 * `docker run -e` 參數  
     將環境變數傳入容器
 
+
+## 暫存：docker-compose
+* install:
+    
+```bash
+curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose && docker-compose --version
+```
+
 -----
 
 [linuxModuleManagement]: https://blog.csdn.net/yangjizhen1533/article/details/112239092
