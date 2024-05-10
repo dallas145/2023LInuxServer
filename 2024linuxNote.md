@@ -276,11 +276,11 @@
 
 * 使用另一台linux虛擬機連線存取  
     1. 安裝`davfs2`  
-        ```bash
+        ```
         yum install -y davfs2
         ```
     2. 掛載WebDAV磁碟  
-        ```bash
+        ```
         mkdir /cloud
         mount -t davfs http://192.168.241.101 /cloud
         ```
@@ -326,7 +326,7 @@
 ### 正則表達式/正規表示式 (Regular Expression / RE)
 
 * ex: 找出系統的帳號  
-    ```bash
+    ```
     grep -n nologin$ /etc/passwd
     ```
     ![](source/linux0320-2.png)
@@ -364,7 +364,7 @@ Windows Powershell 中的 `Get-Process`指令輸出格式為：
 ### Docker
 #### 安裝最新版：  
 ##### Uninstall old versions:  
-```bash
+```
 sudo yum remove docker \
                 docker-client \
                 docker-client-latest \
@@ -377,24 +377,24 @@ sudo yum remove docker \
 
 ##### Install from rpm repository:  
 > Set up the repository
-```bash
+```
 sudo yum install -y yum-utiils
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 ```  
 
 > Install Docker Engine
-```bash
+```
 sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```  
 
 #### 開啟Docker服務
-```bash
+```
 sudo systemctl enable docker
 sudo systemctl start docker
 ```  
 
 #### 測試是否安裝成功
-```bash
+```
 sudo docker run hello-world
 ```
 
@@ -402,7 +402,7 @@ sudo docker run hello-world
 * **Docker 指令都要在管理員權限下執行**
 
 * 下載image:  
-    ```bash
+    ```
     docker pull [user_name/]{repo_name}[:tag]
     ```
 
@@ -412,7 +412,7 @@ sudo docker run hello-world
     官方的映像檔（如`apache`、`ubuntu`等）的名稱格式通常只會有`repo_name`和`tag`
 
 * 建立並執行container  
-    ```bash
+    ```
     docker run [-i] [-t] [-d] [--name] [--rm] [-p] [-v] {image} [command] [args]
     ```
     * `-i`：`--interactive`，開啟標準輸入。
@@ -424,18 +424,18 @@ sudo docker run hello-world
     * `-v`：掛載路徑。  
 
     * ex:
-        ```bash
+        ```
         docker run -d --rm -p 8000:80 -v /web:/var/www/html centos7:httpd2 /usr/sbin/apachectl -DFOREGROUND
         ```
         > 建立並啟動`centos7:httpd2`，背景執行，離開後自動刪除，連接主機`8000 port`到容器的`80 port`，掛載主機的`/web`路徑到容器的`/var/www/html`路徑，執行`/usr/sbin/apachectl`（開啟apache伺服器），`-DFOREGROUND`使apache 伺服器在容器內的前景執行，讓容器不會自動關閉。  
 
 * 執行已建立的container
-    ```bash
+    ```
     docker start {container_name}
     ```
 
 * 進入可互動的container
-    ```bash
+    ```
     docker attach {container name}
     ```
 
@@ -443,18 +443,18 @@ sudo docker run hello-world
     `Ctrl + p` -> `Ctrl + q`
 
 * 列出執行中的container
-    ```bash
+    ```
     docker ps [-a] [-q]
     ```
     * `-a`：列出未執行的container
     * `-q`：只列出container id
 
 * 停止執行中的container
-    ```bash
+    ```
     docker stop {container id or name}
     ```  
     停止所有執行中的container  
-    ```bash
+    ```
     docker stop `docker ps -q`
     ```
 
@@ -482,11 +482,22 @@ sudo docker run hello-world
 * `docker run -e` 參數  
     將環境變數傳入容器
 
+* 刪除所有container  
+  ```
+  docker rm `docker ps -aq`
+  ```  
+
+* 刪除所有container（包含執行中的）  
+  ```
+  docker rm -f `docker ps -aq`
+  ```  
+
+> todo: add some example from 04-10/course_video
 
 ## 暫存：docker-compose
 * install:
     
-```bash
+```
 curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose && docker-compose --version
 ```
 
