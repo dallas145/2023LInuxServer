@@ -411,23 +411,10 @@ sudo docker run hello-world
     預設的`Registry`是官方的`Docker Hub`  
     官方的映像檔（如`apache`、`ubuntu`等）的名稱格式通常只會有`repo_name`和`tag`
 
-* 建立並執行container  
+* 建立並執行container
     ```
-    docker run [-i] [-t] [-d] [--name] [--rm] [-p] [-v] {image} [command] [args]
+    docker run {image name}
     ```
-    * `-i`：`--interactive`，開啟標準輸入。
-    * `-t`：連接終端機。
-    * `-d`：背景執行。
-    * `--name`：指定container名稱。
-    * `--rm`：退出container後自動刪除。
-    * `-p`：連接埠號。
-    * `-v`：掛載路徑。  
-
-    * ex:
-        ```
-        docker run -d --rm -p 8000:80 -v /web:/var/www/html centos7:httpd2 /usr/sbin/apachectl -DFOREGROUND
-        ```
-        > 建立並啟動`centos7:httpd2`，背景執行，離開後自動刪除，連接主機`8000 port`到容器的`80 port`，掛載主機的`/web`路徑到容器的`/var/www/html`路徑，執行`/usr/sbin/apachectl`（開啟apache伺服器），`-DFOREGROUND`使apache 伺服器在容器內的前景執行，讓容器不會自動關閉。  
 
 * 執行已建立的container
     ```
@@ -479,8 +466,28 @@ sudo docker run hello-world
 ## Week 8 (2024/04/10)
 ### Docker 續
 
-* `docker run -e` 參數  
-    將環境變數傳入容器
+* 建立並執行container  
+    ```
+    docker run [-i] [-t] [-d] [--name] [--rm] [-p] [-v] {image} [command] [args]
+    ```
+    * `-i`：`--interactive`，開啟標準輸入。
+    * `-t`：連接終端機。
+    * `-d`：背景執行。
+    * `--name`：指定container名稱。
+    * `--rm`：退出container後自動刪除。
+    * `-p`：連接埠號。
+    * `-v`：掛載路徑。  
+    * `-e`：將環境變數傳入容器
+    
+
+    * ex:
+        ```
+        docker run -d --name www1 --rm -p 8000:80 -v /web:/var/www/html centos7:httpd2 /usr/sbin/apachectl -DFOREGROUND
+        ```
+        > 建立並啟動`centos7:httpd2`，將容器取名為`www1`，背景執行，關閉後自動刪除，連接主機`8000 port`到容器的`80 port`，掛載主機的`/web`路徑到容器的`/var/www/html`路徑，執行`centos7:httpd2`image中的`/usr/sbin/apachectl`（開啟apache伺服器），`-DFOREGROUND`使apache 伺服器在容器內的前景執行，讓容器不會在離開後自動關閉。  
+
+        ![](source/linux0410-1.png)
+
 
 * 刪除所有container  
   ```
@@ -493,6 +500,7 @@ sudo docker run hello-world
   ```  
 
 > todo: add some example from 04-10/course_video
+> time: 01:21:05
 
 ## Week ? (2024/05/15)
 ### Docker swawrm
@@ -503,6 +511,7 @@ sudo docker run hello-world
 ```
 curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose && docker-compose --version
 ```
+
 
 -----
 
