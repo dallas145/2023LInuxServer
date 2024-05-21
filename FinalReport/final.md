@@ -373,6 +373,8 @@ sudo ufw enable
 
 ---
 
+<!-- _transition: none -->
+
 #### 題外話
 
 這份 PPT 使用 `marp cli` 製作
@@ -381,6 +383,12 @@ sudo ufw enable
 `marp cli` 可使用 markdown 檔案製作簡報
 可匯出為 `html` 、 `pdf` 甚至是 `pptx`
 非常方便
+
+---
+
+<!-- _transition: none -->
+
+![bg width:85%](./src/marp.png)
 
 ---
 
