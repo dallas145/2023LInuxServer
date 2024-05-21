@@ -392,6 +392,7 @@ sudo ufw enable
 - [開源遠端桌面存取軟體 RustDesk](https://ithelp.ithome.com.tw/articles/10341212)
 - [Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
 - [marp-cli](https://github.com/marp-team/marp-cli?tab=readme-ov-file)
+- [marpit](https://marpit.marp.app/)
 
 ---
 
