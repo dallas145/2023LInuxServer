@@ -499,8 +499,91 @@ sudo docker run hello-world
   docker rm -f `docker ps -aq`
   ```  
 
-> todo: add some example from 04-10/course_video
-> time: 01:21:05
+#### 使用Dockerfile建立image
+
+ex:
+```
+mkdir testdocker
+cd testdocker
+touch index.html
+echo "Hello World!" > index.html
+vim Dockerfile
+```
+Dockerfile:
+```
+FROM centos:centos7
+RUN yum -y install httpd
+EXPOSE 80
+ADD index.html /var/www/html/
+```
+
+```
+docker build -t centos7:httpd .
+```
+> 指令格式：  
+> docker build -t {image名稱:tag} {build執行位置}
+
+執行建立的image:
+```
+docker run -itd -p 8080:80 centos7:httpd /usr/sbin/apachectl -DFOREGROUND
+```
+
+測試：
+```
+curl 127.0.0.1:8080/index.html
+```
+有抓到`hello 2024`表示成功
+
+![](./source/linux0410-2.png)
+
+#### Dockerfile CMD(可覆蓋)、ENTRYPOINT(不可覆蓋)
+
+```
+FROM centos:centos7
+RUN yum -y install httpd
+EXPOSE 80
+ADD index.html /var/www/html/
+CMD ["/usr/sbin/apachectl", "-DFOREGROUND"]
+```
+建立：
+```
+docker build -t centos7:httpd2 .
+```
+執行：
+```
+docker run -itd -p 8081:80 centos7:httpd2
+```
+測試：
+```
+curl 127.0.0.1:8081/index.html
+```
+
+#### 參考資料
+[Docker Dockerfile | 菜鸟教程](https://www.runoob.com/docker/docker-dockerfile.html)
+
+#### Docker 擴容
+docker啟動腳本 `testweb.sh`：
+```bash
+#!/usr/bin/bash
+
+for i in {1..5}
+do
+    portno=`expr 8000 + $i`
+    docker run -d -p $portno:80 -v /webdata:/var/www/html centos7:httpd2
+done
+```
+
+```
+chmod +x testweb.sh
+```
+
+* 執行
+```
+./testweb.sh
+```
+![](./source/linux0410-3.png)
+
+> 0410 done
 
 ## Week ? (2024/05/15)
 ### Docker swawrm
