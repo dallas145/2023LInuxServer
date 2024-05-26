@@ -583,7 +583,155 @@ chmod +x testweb.sh
 ```
 ![](./source/linux0410-3.png)
 
-> 0410 done
+## Week 9 (2024/04/17)
+### docker 備份和搬移
+
+#### docker save & docker load
+
+```
+docker save {image name[:tag name]} > {filename}.tar
+```
+
+ex:
+```
+docker save centos7:httpd2 > test.tar
+```
+
+用`scp`把檔案複製到另一臺虛擬機
+```
+scp ./test.tar root@192.168.241.101:/tmp
+```
+
+在另一臺虛擬機載入備份
+```
+docker load < {filename}.tar
+```
+
+ex:
+```
+docker load < test.tar
+```  
+![](./source/linux0417-1.png)
+
+#### upload to docker hub
+
+**先在docker hub註冊帳號，再到虛擬機裡登入**
+```
+docker login
+```
+
+以`busybox`為例操作：
+```
+docker pull busybox
+```
+
+```
+docker run -it --name test1 busybox /bin/sh
+```
+
+在container中建立一些檔案作為修改：
+```
+/ # cd /tmp
+/tmp # touch 1 2 3 4 5
+/tmp # ls
+1 2 3 4 5
+/tmp # exit
+```
+
+使用`docker commit`建立image（dallas145是docker hub的username）：
+```
+docker commit test1 dallas145/mybusybox:0.1
+```
+
+> 補充：`docker tag`可為image產生別名  
+> ex: `docker tag busybox mybusybox`
+
+使用`docker push`將image推送至docker hub
+```
+docker push dallas145/mybusybox:0.1
+```
+
+完成後到docker hub查看
+![](./source/linux0417-2.png)
+
+從docker hub下載：
+```
+docker pull dallas145/mybusybox:0.1
+```
+
+**補充：[用 Harbor 架設私有 Docker 倉庫. 用 Harbor 架設一個僅供公司內網存取的 Docker Registry | by 被蛇咬到的魯卡 | Starbugs Weekly 星巴哥技術專欄 | Medium](https://medium.com/starbugs/用-harbor-架設私有-docker-倉庫-9e7eb2bbf769)**
+
+### load balancer
+使用腳本建立伺服器：
+```bash
+for i in {1..5}
+do
+    mkdir -p /web$i
+    echo $i > /web$i/hi.htm
+    portno=`expr 8000 + $i`
+    docker run -d -p $portno:80 -v /web$i:/var/www/html centos7:httpd2 /usr/sbin/apachectl -DFOREGROUND
+done
+```  
+![](./source/linux0417-3.png)
+
+`haproxy`：
+```
+mkdir haproxy
+cd haproxy
+vim haproxy.cfg
+```
+
+haproxy.cfg:
+```
+defaults
+  mode http
+  timeout client 10s
+  timeout connect 5s
+  timeout server 10s
+  timeout http-request 10s
+
+frontend myfrontend
+  bind 0.0.0.0:8080
+  default_backend myservers
+
+backend myservers
+  balance roundrobin
+  server server1 127.0.0.1:8001
+  server server2 127.0.0.1:8002
+  server server3 127.0.0.1:8003
+  server server4 127.0.0.1:8004
+  server server5 127.0.0.1:8005
+```
+
+執行haproxy：
+```
+docker run -d -p 8080:8080 --name my-haproxy -v /root/hptest:/usr/local/etc/haproxy:ro haproxy
+```
+
+測試：
+![](./source/linux0417-4.png)
+
+### docker network
+查看docker網路：
+```
+docker network ls
+```
+
+查看docker網路詳細資訊：
+```
+docker network inspect {NETWORK ID}
+```
+
+建立docker network：
+```
+docker network create -d {type} {name}
+```
+
+**補充：[Docker四种网络模式（Bridge，Host，Container，None） - 大数据老司机 - 博客园](https://www.cnblogs.com/liugp/p/16328904.html)**  
+* 用預設的`docker 0 bridge`網路，container之間只能用ip互連
+* 用自己建立的`bridge`網路，container之間可以用ip或name互連
+
+> 0417 done
 
 ## Week ? (2024/05/15)
 ### Docker swawrm
