@@ -67,7 +67,7 @@ RustDesk 預設使用P2P連線
 ## 中繼伺服器
 
 RustDesk 有提供免費的中繼伺服器
-若有資安疑慮可以自架中繼伺服器
+若有資安疑慮或想降低延遲可以自架中繼伺服器
 
 ---
 
@@ -372,23 +372,43 @@ sudo ufw enable
 
 
 ---
+<!-- _transition: none -->
+
+<!-- <video controls>
+  <source src="./src/rustdesk.mp4" type="video/mp4">
+</video> -->
+<video src="./src/rustdesk.mp4" controls width="85%"></video>
+
+---
 
 <!-- _transition: none -->
 
-#### 題外話
+#### 額外介紹
 
-這份 PPT 使用 `marp cli` 製作
+這份簡報使用 `marp for VSCode`和`marp cli` 製作
+<br />
+`marp cli` 使用 markdown 檔案製作簡報
+可匯出為**簡報形式的`html`** 、 `pdf` 甚至是 `pptx`
 
+---
 
-`marp cli` 可使用 markdown 檔案製作簡報
-可匯出為 `html` 、 `pdf` 甚至是 `pptx`
-非常方便
+<!-- _transition: none -->
+
+只要會寫 markdown 
+加上一點點 css
+就可以製作簡報
 
 ---
 
 <!-- _transition: none -->
 
 ![bg width:85%](./src/marp.png)
+
+---
+
+<!-- _transition: none -->
+
+<video src="./src/marp.mp4" controls autoplay width="85%"></video>
 
 ---
 
