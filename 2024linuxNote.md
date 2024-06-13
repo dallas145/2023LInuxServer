@@ -513,7 +513,7 @@ echo "Hello World!" > index.html
 vim Dockerfile
 ```
 Dockerfile:
-```
+```dockerfile
 FROM centos:centos7
 RUN yum -y install httpd
 EXPOSE 80
@@ -841,7 +841,244 @@ docker run -d -p 8080:8080 --name my-apache-php-app --network mybr -v "/root/tes
 #### 練習
 ![](./source/linux0424-6.png)
 
-> 0424 done
+## Week 11 (2024/05/01)
+### Gitlab - CI/CD (Continuous Delivery/Continuous Deplyment)
+使用 `iris` 示範
+
+建立 `train_model.py`:
+
+```python
+# coding: utf-8
+import pickle
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn import tree
+
+# simple demo for traing and saving model
+iris=datasets.load_iris()
+x=iris.data
+y=iris.target
+
+#labels for iris dataset
+labels ={
+	0: "setosa",
+	1: "versicolor",
+	2: "virginica"
+}
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=.25)
+classifier=tree.DecisionTreeClassifier()
+classifier.fit(x_train,y_train)
+predictions=classifier.predict(x_test)
+
+#export the model
+model_name = 'model.pkl'
+print("finished training and dump the model as {0}".format(model_name))
+pickle.dump(classifier, open(model_name,'wb'))
+```
+
+安裝`pip`:
+```
+yum install python-pip
+```
+
+```
+python -m pip install pip==20.3.4
+```
+
+安裝`sklearn`:
+```
+pip install sklearn==
+```
+
+安裝完成後，執行 `train_model.py`:
+```
+python train_model.py
+```
+
+![](./source/linux0501-1.png)
+
+安裝 `flask`:
+```
+pip install flask
+```
+
+建立 `server.py`:
+```python
+# coding: utf-8
+import pickle
+
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# Load the model
+model = pickle.load(open('model.pkl', 'rb'))
+labels = {
+  0: "versicolor",   
+  1: "setosa",
+  2: "virginica"
+}
+
+@app.route('/api', methods=['POST'])
+def predict():
+    # Get the data from the POST request.
+    data = request.get_json(force = True)
+    predict = model.predict(data['feature'])
+    return jsonify(predict[0].tolist())
+
+if __name__ == '__main__':
+    app.run(debug = True, host = '0.0.0.0')
+```
+
+建立 `client.py`:
+```python
+# coding: utf-8
+import requests
+# Change the value of experience that you want to test
+url = 'http://127.0.0.1:5000/api'
+feature = [[5.8, 2.0, 4.2, 3.2]]
+labels ={
+  0: "setosa",
+  1: "versicolor",
+  2: "virginica"
+}
+
+r = requests.post(url,json={'feature': feature})
+print(labels[r.json()])
+```
+
+啟動伺服器並使用客戶端連線：
+```
+python server.py
+```
+```
+python client.py
+```
+
+![](./source/linux0501-2.png)
+
+#### 將程式打包成docker image
+下載基礎image作為基底：
+```
+docker pull nitincypher/docker-ubuntu-python-pip
+```
+
+建立 `Dockerfile`:
+```dockerfile
+FROM nitincypher/docker-ubuntu-python-pip
+
+COPY ./requirements.txt /app/requirements.txt
+
+WORKDIR /app
+
+RUN pip install -r requirements.txt
+
+COPY server.py /app
+
+COPY train_model.py /app
+
+CMD python /app/train_model.py && python /app/server.py
+```
+
+建立 `requirements.txt`
+```
+sklearn
+flask
+```
+
+Build:
+```
+docker build -t iris:1.0 .
+```
+
+執行：
+```
+docker run -itd --name iris -p 5000:5000 iris:1.0
+```
+
+測試：
+```
+python client.py
+```
+
+![](./source/linux0501-3.png)
+
+#### 透過Gitlab建立 CI/CD
+設定`ssh`金鑰：
+![](./source/linux0501-4.png)
+
+設定Git：
+```
+git config --global user.name "dallas145"
+git config --global user.email "mikelg512@gmail.com"
+```
+
+將程式上傳至Gitlab:
+```
+git init
+git remote add origin https://gitlab.com/dallas145/iris2024.git
+git add .
+git commit -m "First commit"
+git push -uf origin main
+```
+
+![](./source/linux0501-5.png)
+
+#### 建立Gitlab-runner
+```
+curl -L --output /usr/local/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64
+```
+```
+chmod +x /usr/local/bin/gitlab-runner
+```
+```bash
+useradd --comment "Gitlab Runner" --create-home gitlab-runner --shell /bin/bash
+usermod -aG docker gitlab-runner
+```
+```
+/usr/local/bin/gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
+/usr/local/bin/gitlab-runner start
+```
+
+![](./source/linux0501-6.png)
+
+取得runner token:
+
+![](./source/linux0501-7.png)
+
+註冊runner:
+```
+gitlab-runner register
+```
+
+![](./source/linux0501-8.png)
+
+編輯`.gitlab-ci.yml`:
+```yml
+stages:
+  - deploy
+
+docker-deploy:
+  stage: deploy
+  script:
+    - docker build -t iris .
+    - if [ $(docker ps -aq --filter name=iris) ]; then docker rm -f iris; fi
+    - docker run -d -p 5000:5000 --name iris iris
+  tags:
+    - centos7-2
+```
+
+將檔案推回gitlab:
+```
+git add .
+git commit -m "update"
+git push origin main
+```
+
+測試：
+
+![](./source/linux0501-9.png)
 
 ## Week ? (2024/05/15)
 ### Docker swawrm
