@@ -167,6 +167,7 @@
 1. 建立`hello`資料夾
 
 2. 建立`hello/hello.c`檔案
+
     ```c
     #include <linux/init.h>
     #include <linux/module.h>
@@ -214,6 +215,7 @@
 * 發現如下圖錯誤  
     ![](source/linux0306-3.png)  
     進入`/usr/src/kernels/`檢查有沒有相應的內核開發工具，如果沒有  
+    
     ```sh
     UNAME=$(uname -r)
     yum install gcc kernel-devel-${UNAME%.*}
@@ -221,6 +223,7 @@
 
 **記得要使用新版gcc**  
 * gcc更新指令：  
+
     ```sh
     yum -y install centos-release-scl
     yum -y install devtoolset-7-gcc devtoolset-7-gcc-c++ devtoolset-7-binutils
@@ -731,17 +734,118 @@ docker network create -d {type} {name}
 * 用預設的`docker 0 bridge`網路，container之間只能用ip互連
 * 用自己建立的`bridge`網路，container之間可以用ip或name互連
 
-> 0417 done
+## Week 10 (2024/04/24)
+### docker network
+使用預設的 `docker 0` 網路，容器間只能使用 `ip` 連接；使用新增的網路，可使用 `container name` 連接。
 
-## Week ? (2024/05/15)
-### Docker swawrm
-
-## 暫存：docker-compose
+### docker-compose
 * install:
     
 ```
 curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose && docker-compose --version
 ```
+
+![](./source/linux0424-1.png)
+
+#### 實驗
+使用兩台虛擬機，分別架設`MySQL`、`php`
+
+##### 建立docker network
+```
+docker network create -d bridge mybr
+```
+
+##### MySQL
+```
+docker run -itd --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql:5.7.24
+```
+
+啟動成功後，建立資料表與資料
+
+```sql
+/* 顯示目前有的資料庫 */
+show databases;   
+/* 創建資料庫 */
+create database testdb;   
+/*  使用資料庫 */
+use testdb;  
+/* 創建資料表 */
+create table addrbook(name varchar(50) not null, phone char(10));
+/* 加入資料 */
+insert into addrbook(name, phone) values ("tom", "0912345678");
+insert into addrbook(name, phone) values ("mary", "0987654321");
+/* 選擇資料 */
+select name,phone from addrbook;
+/* */
+update addrbook set phone="0987465123" 
+```
+
+![](./source/linux0424-2.png)
+
+##### php
+test.php:
+```php
+<?php
+$servername="mydb";
+$username="root";    
+$password="123456";
+$dbname="testdb";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if($conn->connect_error){
+    die("connection failed: " . $conn->connect_error);
+}
+else{
+    echo "connect OK!" . "<br>";
+}
+
+$sql="select name,phone from addrbook";
+$result=$conn->query($sql);
+
+if($result->num_rows>0){
+    while($row=$result->fetch_assoc()){
+        echo "name: " . $row["name"] . "\tphone: " . $row["phone"] . "<br>";
+    }
+} else {
+    echo "0 record";
+}
+?>
+    
+```
+執行
+```
+docker run -d -p 8080:8080 --name my-apache-php-app --network mybr -v "/root/test-docker/php-code":/var/www/html php:7.2-apache
+```
+
+使用 `curl 127.0.0.1:8080/test.php` 測試會發現錯誤：
+
+![](./source/linux0424-3.jpeg)
+
+* 解法：
+進入 `php` container 並安裝 `mysqli` 套件：
+
+![](./source/linux0424-4.png)
+
+##### 成功結果
+![](./source/linux0424-5.png)
+
+### docker volume
+
+[Docker 實戰系列（三）：使用 Volume 保存容器內的數據 | by Larry Lu | Larry・Blog](https://larrylu.blog/using-volumn-to-persist-data-in-container-a3640cc92ce4)
+
+### docker namespace
+
+[理解Docker容器网络之Linux Network Namespace | Tony Bai](https://tonybai.com/2017/01/11/understanding-linux-network-namespace-for-docker-network/)
+
+#### 練習
+![](./source/linux0424-6.png)
+
+> 0424 done
+
+## Week ? (2024/05/15)
+### Docker swawrm
+
 
 
 -----
