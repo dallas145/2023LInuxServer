@@ -1333,12 +1333,98 @@ docker-compose up -d
 
 **參考資料：[利用 Dockfile、Docker Compose 建立 LAMP 環境 (PHP、Apache、MySQL) - HackMD](https://hackmd.io/@titangene/docker-lamp)**
 
-> 0508 done
+## Week 13 (2024/05/15)
+### 1Panel
+安裝：  
+```
+curl -sSL https://resource.fit2cloud.com/1panel/package/quick_start.sh -o quick_start.sh && sh quick_start.sh
+```
 
-## Week ? (2024/05/15)
+![](./source/linux0515-1.png)
+
+![](./source/linux0515-2.png)
+
 ### Docker swawrm
+開三台虛擬機  
+7-1當manager  
+7-2、7-3當node  
+7-1初始化：  
+```
+docker swarm init --advertise-addr 192.168.241.100
+```
+複製顯示的指令，在另外兩台執行。
+```
+docker swarm join --token {剛剛複製的token}
+```
+可以在manager使用指令列出所有節點：  
+```
+docker node ls
+```
+![](./source/linux0515-3.png)
 
+#### visualizer
+```
+docker service create --name=viz --publish=8080:8080/tcp --constraint=node.role==manager --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock dockersamples/visualizer
+```
 
+![](./source/linux0515-4.png)
+
+#### 範例
+使用指令建立服務
+```
+docker service create  --name myweb httpd
+```
+
+![](./source/linux0515-5.png)
+
+查看所有服務
+```
+docker service ls
+```
+
+#### 實驗
+將centos7-3關機，模擬硬體錯誤。  
+服務會自動轉移：  
+
+![](./source/linux0515-6.png)
+
+#### 擴容
+```
+docker service scale myweb=3
+```
+
+![](./source/linux0515-7.png)
+
+#### 讓節點不接收工作
+```
+docker node update --availability drain centos7-1
+```
+
+#### 重新接收新的工作
+```
+docker node update --availability active centos7-1
+```
+
+#### 移除服務
+```
+docker service rm myweb
+```
+
+#### 建立時就有副本
+```
+docker service create --name myweb --replicas 3 httpd
+```
+
+#### 開放服務對外連線
+```
+docker service update --publish-add 8081:80 myweb
+```
+
+![](./source/linux0515-8.png)
+
+![](./source/linux0515-9.png)
+
+> 0515 done
 
 -----
 
