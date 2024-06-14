@@ -1080,6 +1080,261 @@ git push origin main
 
 ![](./source/linux0501-9.png)
 
+## Week 12 (2024/05/08)
+### 補充
+將程式輸出導向至檔案並在背景執行，避免程式佔用終端機。  
+ex:  
+`test.sh`:
+```bash
+#!/bin/bash
+
+for i in {1..200}
+do
+    echo $i
+    sleep 1
+done
+```
+使用以下指令執行：
+```
+./test.sh > log 2>&1 &
+```
+可使用以下指令追蹤程式輸出：
+```
+tail -f log
+```
+若要防止關閉終端機造成程式中斷，可使用`nohup`指令：
+```
+nohup ./test.sh > log 2>&1 &
+```
+關閉終端機也不會影響執行中的程式。
+
+**參考：[Linux 的 nohup 指令使用教學與範例，登出不中斷程式執行 – G. T. Wang](https://blog.gtwang.org/linux/linux-nohup-command-tutorial/)**
+
+### docker-compose
+確認已安裝docker-compose  
+![](./source/linux0508-1.png)
+
+#### 範例一
+```
+mkdir test1 && cd test1
+vim docker-compose.yml
+```
+docker-compose.yml:  
+```yml
+services:
+  app:
+    image: hello-world
+```
+啟動docker-compose:
+```
+docker-compose up
+```
+可使用`docker-compose ps`查看啟用的docker-compose:
+
+![](./source/linux0508-2.png)
+
+#### 範例二
+```
+mkdir test2 && cd test2
+vim docker-compose.yml
+```
+docker-compose.yml:  
+```yml
+services:
+  app:
+    build:
+      context: .
+```
+Dockerfile:  
+```dockerfile
+FROM alpine
+	 
+RUN apk add --no-cache bash
+ 
+CMD bash -c 'for((i=1;;i+=1)); do sleep 1 && echo "Counter: $i"; done'
+```
+啟動：  
+```
+docker-compose build
+```
+```
+docker-compose up -d
+```
+```
+docker-compose logs # 查看程式執行進度
+```
+```
+docker-compose down # 停止程式
+```
+
+![](./source/linux0508-3.png)
+
+#### 範例三
+覆蓋dockerfile中定義的指令
+```
+mkdir test3 && cd test3
+vim docker-compose.yml
+```
+docker-compose.yml:  
+```yml
+services:
+  app:
+    build:
+      context: .
+    image: counter
+    command: >
+      bash -c 'for((i=1;;i+=2)); do sleep 1 && echo "Counter: $$i"; done'
+```
+Dockerfile:  
+```dockerfile
+FROM alpine
+	 
+RUN apk add --no-cache bash
+ 
+CMD bash -c 'for((i=1;;i+=1)); do sleep 1 && echo "Counter: $i"; done'
+```
+啟動：  
+```
+docker-compose up -d
+```
+
+#### 範例四
+掛載檔案目錄
+```
+mkdir /mydata && touch /mydata/{1..10}
+mkdir test4 && cd test4
+vim docker-compose.yml
+```
+Dockerfile:
+```dockerfile
+FROM centos:centos7
+RUN yum -y install httpd
+EXPOSE 80
+ADD index.html /var/www/html
+CMD ["/usr/sbin/apachectl","-DFOREGROUND"]
+```
+docker-compose.yml
+```yml
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - /mydata:/docker-mydata
+    ports:
+      - "3000-3063:80"
+```
+測試：  
+```
+docker-compose up -d
+docker-compose exec -it app bash
+```
+
+![](./source/linux0508-5.png)
+
+#### 範例五
+```
+mkdir test5 && cd test5
+touch docker-compose.yml Dockerfile index.html
+```
+index.html:
+```html
+hello world
+```
+Dockerfile:
+```dockerfile
+FROM centos:centos7
+RUN yum -y install httpd
+EXPOSE 80
+ADD index.html /var/www/html
+CMD ["/usr/sbin/apachectl","-DFOREGROUND"]
+```
+docker-compose.yml
+```yml
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "3000-3063:80"
+```
+啟動：
+```
+docker-compose up -d --scale app=5
+```
+
+![](./source/linux0508-4.png)
+
+#### 範例六
+```
+mkdir test6 && cd test6
+touch app.py docker-compose.yml Dockerfile requirements.txt
+```
+requirements.txt:  
+```
+flask
+redis
+```
+Dockerfile:  
+```dockerfile
+FROM python
+ADD . /code
+WORKDIR /code
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
+```
+app.py:
+```python
+from flask import Flask
+
+app = Flask(__name__)
+cache = redis.Redis(host='redis', port=6379)
+
+def get_hit_count():
+    retries = 5
+    while True:
+        try:
+            return cache.incr('hits')
+        except redis.exceptions.ConnectionError as exc:
+            if retries == 0:
+                raise exc
+            retries -= 1
+            time.sleep(0.5)
+
+@app.route('/')
+def get_index():
+    count = get_hit_count()
+    return "Yo! 你是第 {} 次瀏覽\n".format(count)
+
+if __name__ == "__main__":
+    app.runt(host="0.0.0.0", debug=True)
+```
+docker-compose:  
+```yml
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+  radis:
+    image: "redis:alpine"
+```
+啟動：
+```
+docker-compose up -d
+```
+測試：  
+
+![](./source/linux0508-6.png)
+
+**參考資料：[利用 Dockfile、Docker Compose 建立 LAMP 環境 (PHP、Apache、MySQL) - HackMD](https://hackmd.io/@titangene/docker-lamp)**
+
+> 0508 done
+
 ## Week ? (2024/05/15)
 ### Docker swawrm
 
