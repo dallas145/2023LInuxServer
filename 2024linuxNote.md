@@ -32,7 +32,7 @@
 安裝所需軟體  
 
 ```
-# yum install -y ncurses-devl make gcc bc bison flex elfutils-libelf-devel openssl-devel grub2
+# yum install -y ncurses-devel make gcc bc bison flex elfutils-libelf-devel openssl-devel grub2
 ```
 
 完成後，輸入：  
