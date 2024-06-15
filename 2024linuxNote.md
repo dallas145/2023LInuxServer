@@ -1542,7 +1542,106 @@ curl 192.168.241.100:8888/test.php
 
 ![](./source/linux0522-2.png)
 
-> 0522 done
+## Week 15 (2024/05/29)
+### ansible
+ansible 適合中小型的網路規模。
+
+#### 前置動作
+讓centos7-1（主控端）可以用ssh（無密碼）連上centos7-2、centos7-3（被控端）
+
+![](./source/linux0529-1.png)
+
+為了方便，編輯`/etc/hosts`，讓各虛擬機可以用名稱對應ip
+
+![](./source/linux0529-2.png)
+
+在主控端安裝ansible
+```
+yum install ansible
+```
+
+在主控端編輯`/etc/ansible/hosts`，加入以下內容：
+```
+[server1]
+192.168.241.101 # centos7-2
+
+[server2]
+192.168.241.102 # centos7-3
+
+[allservers]
+centos7-2
+centos7-3
+```
+
+使用指令檢查是否配置成功
+```
+ansible server1 -m ping
+ansible server2 -m ping
+ansible allservers -m ping
+```
+
+![](./source/linux0529-3.png)
+
+* 可使用 `ansible-doc -l` 列出所有可用模組。
+
+#### 使用ansible-playbook
+```
+mkdir test-ansible && cd test-ansible
+vim test1.yml
+```
+test1.yml:
+```yml
+---
+- hosts: server1
+  tasks:
+    - name: test ping
+      ping:
+```
+執行腳本
+```
+ansible-playbook test1.yml
+```
+
+![](./source/linux0529-4.png)
+
+可使用指令蒐集被控端資訊
+```
+ansible server1 -m setup
+```
+
+**ansible command 模組只能執行較單一的指令，若指令較複雜，須使用 shell 模組。**  
+在 shell 或 command 模組的指令中加入`chdir=路徑`，才能在指定路徑執行指令。
+
+![](./source/linux0529-5.png)
+
+#### 範例
+test2.yml:
+```yml
+---
+- hosts: server1
+  gather_facts: no
+  tasks:
+    - name: create an empty file under /tmp
+      command:
+        chdir: /tmp
+        cmd: touch a.txt
+    - name: list all files under /tmp and grep a
+      shell:
+        chdir: /tmp
+        cmd: "ls -l | grep a.txt"
+      register: results
+    - name: show the results
+      debug:
+        msg: "{{ results['stdout'] }}"
+```
+執行：
+```
+ansible-playbook test2.yml
+```
+
+![](./source/linux0529-6.png)
+
+> 0529 done
 
 -----
 
