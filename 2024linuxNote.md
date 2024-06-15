@@ -1424,7 +1424,125 @@ docker service update --publish-add 8081:80 myweb
 
 ![](./source/linux0515-9.png)
 
-> 0515 done
+## Week 14 (2024/05/22)
+### telegram ai bot
+沒有做
+
+### Docker swarm 實做
+在master node(centos7-1) 建立以下資料夾，並安裝`nfs`
+```
+mkdir /mydb /myphp
+```
+```
+yum install nfs-utils
+```
+啟動：
+```
+systemctl start rpcbind
+systemctl start nfs
+```
+設定共享目錄  
+`/etc/exports`:
+```
+/mydb/  192.168.241.0/24(rw,sync,no_root_squash,no_all_squash)
+/myphp/  192.168.241.0/24(rw,sync,no_root_squash,no_all_squash)
+```
+重新啟動服務
+```
+systemctl restart rpcbind
+systemctl restart nfs
+```
+檢查是否成功
+```
+showmount -e localhost
+```
+
+在worker node(centos7-2, centos7-3) 建立以下資料夾，並掛載到master node
+```
+mkdir /mydb /myphp
+```
+```
+mount -t nfs 192.168.241.100:/mydb /mydb
+mount -t nfs 192.168.241.100:/myphp /myphp
+```
+
+建立新的docker network
+```
+docker network create -d overlay mynet
+```
+
+建立`mydb`服務：
+```
+docker service create --name mydb --network mynet --mount type=bind,source=/mydb,target=/var/lib/mysql --env MYSQL_ROOT_PASSWORD=123456 --publish published=3306,target=3306 mysql
+```
+
+使用`docker service ls`檢視container name，並進入container
+```
+docker exec -it {container name} /bin/bash
+```
+使用mysql建立database
+```
+mysql -uroot -p
+```
+```
+create datebase testdb;
+```
+
+使用`docker service rm mydb`刪除服務後，再次建立服務，資料不會不見。
+
+#### 連結php
+進到mydb，使用以下指令建立資料表。
+```sql
+create database testsql;
+use testsql;
+create table testtable(school char(5),name char(10),id int);
+insert into testtable(school, name, id) values ('NQU','Jerry','123');
+insert into testtable(school, name, id) values ('NQU','Amy','234');
+```
+
+![](./source/linux0522-1.png)
+
+建立/myphp/test.php:
+```php
+<?php
+$servername="mydb";
+$username="root";
+$password="123456";
+$dbname="testsql";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if($conn->connect_error){
+	die("connecttion failed: " . $conn->connect_error);
+}
+else{
+	echo "connect ok!" . "<br>";
+}
+
+$sql="select * from testtable";
+$result=$conn->query($sql);
+
+if($result->num_rows>0){
+	while($row=$result->fetch_assoc()){
+		echo "school: " . $row["school"] . "\tname: " . $row["name"] . "\tid: " . $row["id"] . "<br>";
+	}
+}else {
+	echo "0 record";
+}
+?>
+```
+建立`myphp`服務：
+```
+docker service create --name myphp --network mynet --mount type=bind,source=/myphp,target=/var/www/html --publish published=8888,target=80 radys/php-apache:7.4
+```
+使用`curl`驗證：
+```
+curl 192.168.241.100:8888/test.php
+```
+
+![](./source/linux0522-2.png)
+
+> 0522 done
 
 -----
 
