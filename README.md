@@ -1,8 +1,8 @@
-# 2023LinuxServer
+# 2024LinuxServer
 
 ### 課堂筆記
 
-[在這裡](./LinuxNote_ordered.md)
+[在這裡](./2024linuxNote.md)
 
 ## 期末報告
 
