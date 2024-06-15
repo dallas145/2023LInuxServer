@@ -1641,7 +1641,137 @@ ansible-playbook test2.yml
 
 ![](./source/linux0529-6.png)
 
-> 0529 done
+## Week 16 (2024/06/05)
+### ansible
+確認`ubuntu`虛擬機可以用ssh無密碼連線。  
+**如果使用的是`ubuntu 24.04`，必須手動編譯安裝 python2 才可以正常使用centos7中較舊的ansible控制。可以參考[Ubuntu 20 编译安装 Python-2.7.18_python-2.7.18.tgz 包下载-CSDN博客](https://blog.csdn.net/lsqtzj/article/details/114298091)**
+
+編輯`ubuntu`中的`/etc/ssh/sshd_config`，加入以下內容：
+```
+PermitRootLogin yes
+```
+
+編輯`/etc/ansible/hosts`，加入ubuntu（若使用額外安裝的python，需要加上 python 位置）:
+```
+[ubuntu]
+192.168.241.104
+
+[ubuntu:vars]
+ansible_python_intepreter=/usr/local/bin/python
+```
+使用`ansible all -m ping`測試：
+
+![](./source/linux0605-1.png)
+
+#### 範例
+寫一個簡單的腳本`a.sh`：
+```sh
+hostname
+```
+變更權限：
+```
+chmod +x a.sh
+```
+使用ansible執行：
+```
+ansible all -m script -a "./a.sh"
+```
+
+#### 遠端複製
+```
+ansible server1 -m copy -a "src=./hello.txt dest=/tmp/hello.txt owner=user group=user mode=666"
+```
+
+![](./source/linux0605-2.png)
+
+#### 變更檔案屬性
+```
+ansible server1 -m file -a "path=/tmp/hello.txt owner=root group=root mode=644"
+```
+
+![](./source/linux0605-3.png)
+
+#### 控制服務
+停止server1的httpd:
+```
+ansible server1 -m service -a "name=httpd state=stopped"
+```
+啟動server1的httpd:
+```
+ansible server1 -m service -a "name=httpd state=started"
+```
+
+#### 範例
+```
+touch hi.j2 test3.yml
+```
+hi.j2:
+```
+Hello "{{ dynamic_world }}"
+```
+test3.yml:
+```yml
+---
+- hosts: server1
+  gather_facts: no
+  vars:
+    dynamic_world: "World"
+  tasks:
+    - name: test template
+      template:
+        src: hi.j2
+        dest: /tmp/hello_world.txt
+```
+執行：
+```
+ansible-playbook test3.yml
+```
+
+![](./source/linux0605-4.png)
+
+#### 範例
+用 ansible 安裝 httpd 並將 httpd 的 port 改成 8080
+hi.htm:
+```
+hi
+```
+httpd.conf.j2:  
+複製 httpd 的預設配置檔，修改`Listen xx`:
+```
+Listen {{ portnum }}
+```
+test5.yml:
+```yml
+---
+- hosts: server1
+  gather_facts: no
+  vars:
+    portnum: 8080
+  tasks:
+    - name: install httpd
+      yum:
+        name:
+          - httpd
+        state: present
+    - name: copy configuration file
+      template:
+        src: httpd.conf.j2
+        dest: /etc/httpd/conf/httpd.conf
+    - name: copy hi.htm
+      copy:
+        src: hi.htm
+        dest: /var/www/html/hi.htm
+    - name: restart httpd service
+      service:
+        name: httpd
+        state: restarted
+```
+執行：
+```
+ansible-playbook test5.yml
+```
+
+![](./source/linux0605-5.png)
 
 -----
 
