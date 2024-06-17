@@ -2,7 +2,8 @@
 
 ### 課堂筆記
 
-[在這裡](./2024linuxNote.md)
+- [Linux2筆記](./Linuxnote_ordered.md)
+- [Linux3筆記](./2024linuxNote.md)
 
 ## 期末報告
 
